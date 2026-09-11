@@ -707,6 +707,52 @@ fontes estarem prontas.
         - `dados/questoes_pendentes_imagem.json` (as 12 questões com
           alternativa gráfica ainda sem imagem anexada) não tinha
           nenhuma URL de `enem.dev` pra trocar — não precisou de ajuste.
+      - **Quinto follow-up (mesmo dia): bug real de extração, achado ao
+        investigar uma questão "estranha".** Usuário reportou
+        enem-2025-5-espanhol com visualização estranha. Causa raiz: bug
+        de parsing em `extract_enem_2024_2025.py` (Fase 2) — 2025 usa um
+        estilo de cabeçalho de seção diferente de 2024 pra textos
+        compartilhados por várias questões: **"Texto para as Questões de
+        06 a 10."** em vez de só "Questões de 06 a 45". Como
+        `SECTION_HEADER_RE` só reconhecia cabeçalhos que começavam
+        exatamente com "Questões de", essa variante não batia, e o
+        parser continuou despejando esse cabeçalho **e o texto inteiro
+        seguinte** (uma crônica de ~3.800 caracteres sobre escrita à
+        mão) dentro da alternativa E da questão anterior.
+        - Investigação em escala confirmou que é um caso **isolado**: só
+          1 questão em 358 (todo o banco de 2024/2025) tinha esse
+          padrão de contaminação (procurei por alternativas/contexto
+          anormalmente longos e pela string literal "Texto para a").
+        - **Achado adicional, mais sério, ao investigar**: como o texto
+          engolido nunca virava contexto de ninguém, as 5 questões que
+          de fato dependem dele (enem-2025-6 a enem-2025-10) estavam
+          **incompletas** — cada uma só tinha o próprio enunciado curto
+          (ex.: "A autora conclui que as novas tecnologias de escrita"),
+          sem o texto-base necessário pra responder. Isso é diferente
+          do legado (2009-2023), onde o `enem-api` já duplica o texto
+          compartilhado dentro de `alternatives_introduction` de cada
+          questão do grupo — nosso parser de 2024/2025 nunca teve esse
+          mecanismo de "anexar texto compartilhado a um grupo de
+          questões".
+        - **Correções aplicadas**: (1) `SECTION_HEADER_RE` relaxado (sem
+          `^` no início) pra reconhecer "Questões de N a M" em qualquer
+          posição da linha, não só no começo — evita a mesma
+          contaminação numa reextração futura. (2) Patch cirúrgico
+          direto no `banco_questoes.json`: restaurada a alternativa E de
+          enem-2025-5-espanhol pro texto correto e curto; a crônica
+          "De próprio punho" (limpa da sequência de números de linha de
+          referência, que nenhuma das 5 questões usa) foi anexada ao
+          início do `context` de enem-2025-6 a enem-2025-10. Total do
+          banco permaneceu 3.115 (nada duplicado nem perdido).
+        - **Limitação conhecida, registrada aqui pra não esquecer**: o
+          parser de 2024/2025 ainda não tem um mecanismo geral de
+          "detectar grupo de N questões compartilhando 1 texto e anexar
+          esse texto a cada uma" — a correção acima foi cirúrgica pra
+          esse caso específico, não uma correção estrutural do parser.
+          Se aparecerem mais ocorrências desse padrão numa extração
+          futura (2026 ou re-extrações), vai exigir o mesmo tipo de
+          verificação manual, ou construir esse mecanismo de verdade no
+          parser.
 - [x] **Fase 4.5 — Dashboard** — CONCLUÍDA (2026-09-11). `GET
       /dashboard/{nome}` implementado em `api/main.py`, aplicando as duas
       regras da seção 5.4: performance usa só a **última resposta** de

@@ -39,7 +39,14 @@ DAY_AREAS = {
 QUESTION_RE = re.compile(r"^QUEST[ÃA]O\s*(\d+)\s*$", re.IGNORECASE)
 ALT_RE = re.compile(r"^([A-E])\t(.*)$")
 LANGUAGE_SECTION_RE = re.compile(r"\(op[cç][aã]o (ingl[eê]s|espanhol)\)", re.IGNORECASE)
-SECTION_HEADER_RE = re.compile(r"^Quest[õo]es de \d+ a \d+", re.IGNORECASE)
+# Sem "^": 2025 usa "Texto para as Questões de 06 a 10." (texto
+# compartilhado por varias questoes), diferente de "Questões de 06 a 45"
+# usado em outros anos/blocos — sem casar esse prefixo variavel, a linha
+# nao era reconhecida como fronteira de secao, e o parser continuava
+# jogando tudo (cabecalho + o texto inteiro seguinte) dentro da ultima
+# alternativa da questao anterior (bug real, achado e corrigido em
+# 2026-09-11 — ver planejamento).
+SECTION_HEADER_RE = re.compile(r"Quest[õo]es de \d+ a \d+", re.IGNORECASE)
 REDACAO_START_RE = re.compile(r"^(PROPOSTA DE REDA[ÇC][ÃA]O|INSTRU[ÇC][ÕO]ES PARA A REDA[ÇC][ÃA]O)", re.IGNORECASE)
 BARCODE_RE = re.compile(r"^\*[0-9A-Za-z]+\*$")
 FOOTER_TRAILER_RE = re.compile(r"[•|].*CADERNO|CADERNO.*[•|]")
