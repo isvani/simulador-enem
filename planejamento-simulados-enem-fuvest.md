@@ -859,4 +859,12 @@ normalizado no momento da extração:
   Store). O notebook tem **Anaconda** instalado em
   `C:\Users\ifria\anaconda3\python.exe` (Python 3.13.9) — usar esse
   binário diretamente (path completo) pra rodar scripts do projeto até
-  configurar o PATH/venv.
+  configurar o PATH/venv (resolvido depois pelo `iniciar-simulador.bash`,
+  que cria seu próprio `.venv/`).
+- **Repositório GitHub**: subido em 2026-09-11 —
+  https://github.com/isvani/simulador-enem (público, decisão do
+  usuário). `.gitignore` exclui `.venv/`, `.claude/`,
+  `dados/simulados.db`, `logs/` e `scripts/_pdf_cache/` (PDFs do INEP,
+  ~17MB, reproduzíveis via `scripts/download_enem_pdfs.py` — não
+  versionados). `dados/banco_questoes.json` (banco de questões, a peça
+  central do projeto) **é** versionado.
