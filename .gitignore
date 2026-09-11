@@ -1,0 +1,20 @@
+# Ambiente Python (recriado por iniciar-simulador.bash --start)
+.venv/
+__pycache__/
+*.pyc
+
+# Configuracao local do Claude Code (paths/permissoes especificos desta maquina)
+.claude/
+
+# Dados de execucao local (nao sao o banco de questoes, sao runtime/usuario)
+dados/simulados.db
+logs/
+
+# PDFs baixados do INEP (~17MB, reproduziveis via scripts/download_enem_pdfs.py)
+scripts/_pdf_cache/
+
+# Arquivos temporarios de sessao (nao deveriam sobrar, mas por seguranca)
+scripts/_*.log
+scripts/_*.txt
+scripts/_*.json
+scripts/_classify_batches/

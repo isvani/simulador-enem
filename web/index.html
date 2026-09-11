@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador ENEM</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topo">
+  <h1>Simulador ENEM</h1>
+  <div id="usuario-atual" class="usuario-atual"></div>
+</header>
+
+<main id="app">
+
+  <!-- TELA 1: inicial -->
+  <section id="tela-inicial" class="tela">
+    <div class="cartao">
+      <label class="campo">
+        <span>Seu nome</span>
+        <input type="text" id="input-nome" placeholder="Como você quer ser identificado?">
+      </label>
+
+      <fieldset class="campo">
+        <legend>Fonte</legend>
+        <div id="filtro-source" class="opcoes"></div>
+      </fieldset>
+
+      <fieldset class="campo">
+        <legend>Área</legend>
+        <div id="filtro-area" class="opcoes"></div>
+      </fieldset>
+
+      <fieldset class="campo">
+        <legend>Subtópico <small>(opcional — só aparece o que já foi classificado)</small></legend>
+        <div id="filtro-subtopic" class="opcoes opcoes-scroll">
+          <p class="dica">Selecione uma área pra ver os subtópicos disponíveis.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="campo">
+        <legend>Dificuldade</legend>
+        <div id="filtro-difficulty" class="opcoes"></div>
+      </fieldset>
+
+      <label class="campo">
+        <span>Quantidade de questões</span>
+        <input type="number" id="input-quantidade" value="10" min="1" max="100">
+      </label>
+
+      <label class="campo">
+        <span>Exploração: <span id="valor-exploracao">0.7</span></span>
+        <input type="range" id="input-exploracao" min="0" max="1" step="0.05" value="0.7">
+        <div class="legenda-slider">
+          <span>Revisar o que já vi</span>
+          <span>Priorizar questões novas</span>
+        </div>
+      </label>
+
+      <p id="erro-inicial" class="erro" hidden></p>
+
+      <button id="btn-iniciar" class="botao-primario">Começar simulado</button>
+      <button id="btn-ver-dashboard" class="botao-secundario botao-bloco">Ver meu desempenho</button>
+    </div>
+  </section>
+
+  <!-- TELA 2: simulado -->
+  <section id="tela-simulado" class="tela" hidden>
+    <div class="barra-simulado">
+      <span id="contador-simulado"></span>
+      <button id="btn-corrigir" class="botao-primario">Corrigir</button>
+    </div>
+    <div id="lista-questoes"></div>
+    <div class="barra-simulado barra-simulado-rodape">
+      <button id="btn-corrigir-rodape" class="botao-primario">Corrigir</button>
+    </div>
+  </section>
+
+  <!-- TELA 3: resultado -->
+  <section id="tela-resultado" class="tela" hidden>
+    <div class="cartao resumo-resultado">
+      <h2 id="resumo-acertos"></h2>
+      <div class="botoes-resultado">
+        <button id="btn-refazer" class="botao-secundario">Refazer com outros filtros</button>
+        <button id="btn-ver-dashboard-resultado" class="botao-secundario">Ver meu desempenho</button>
+      </div>
+    </div>
+    <div id="lista-resultado"></div>
+  </section>
+
+  <!-- TELA 4: dashboard -->
+  <section id="tela-dashboard" class="tela" hidden>
+    <div class="cartao">
+      <h2>Desempenho de <span id="dashboard-nome"></span></h2>
+      <p id="dashboard-vazio" class="dica" hidden>Você ainda não respondeu nenhuma questão com esse nome.</p>
+      <div id="dashboard-geral" class="resumo-geral"></div>
+    </div>
+
+    <div class="cartao">
+      <h3>Acerto por área</h3>
+      <div id="perf-area" class="barras"></div>
+    </div>
+    <div class="cartao">
+      <h3>Acerto por subtópico</h3>
+      <div id="perf-subtopic" class="barras barras-scroll"></div>
+    </div>
+    <div class="cartao">
+      <h3>Acerto por dificuldade</h3>
+      <div id="perf-difficulty" class="barras"></div>
+    </div>
+
+    <div class="cartao">
+      <h3>Cobertura do banco — por área</h3>
+      <div id="cob-area" class="barras"></div>
+    </div>
+    <div class="cartao">
+      <h3>Cobertura do banco — por subtópico</h3>
+      <div id="cob-subtopic" class="barras barras-scroll"></div>
+    </div>
+
+    <div class="cartao">
+      <h3>Tempo médio de resposta</h3>
+      <p class="dica">Média histórica (todas as tentativas) vs. média das últimas 5 respostas em cada grupo — pra ver se você está ficando mais rápido.</p>
+      <div id="tempo-geral" class="tempo-geral"></div>
+      <h4>Por dificuldade</h4>
+      <div id="tempo-difficulty" class="tempos"></div>
+      <h4>Por área</h4>
+      <div id="tempo-area" class="tempos"></div>
+      <h4>Por subtópico</h4>
+      <div id="tempo-subtopic" class="tempos tempos-scroll"></div>
+    </div>
+
+    <button id="btn-dashboard-voltar" class="botao-secundario botao-bloco">Voltar</button>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
