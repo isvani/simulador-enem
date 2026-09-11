@@ -162,14 +162,40 @@ function escaparHtml(texto) {
   return div.innerHTML;
 }
 
+// "\*" e um asterisco escapado (Markdown): quer dizer "isto é um
+// asterisco literal, não abre negrito". Protege ele ANTES de procurar
+// pares de negrito (senão um "\*" isolado poderia virar metade de um
+// "**" falso por acidente) e só devolve o asterisco de verdade no
+// final.
+const MARCADOR_ASTERISCO_ESCAPADO = 'ASTERISCO';
+
 function formatarNegrito(texto) {
-  return escaparHtml(texto).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const protegido = texto.replace(/\\\*/g, MARCADOR_ASTERISCO_ESCAPADO);
+  let seguro = escaparHtml(protegido);
+  // "s" (dotAll): alguns títulos vêm como "**Título \n**", com a quebra
+  // de linha dentro do próprio marcador de negrito — sem essa flag, "."
+  // não atravessa quebra de linha e o negrito não seria reconhecido.
+  seguro = seguro.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
+  return seguro.split(MARCADOR_ASTERISCO_ESCAPADO).join('*');
 }
+
+const IMG_MARKDOWN_BLOCO_RE = /^!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)$/;
 
 // Renderiza um texto que pode conter blocos de puro texto e imagens
 // Markdown misturados, no container dado. Preenche urlsRenderizadas
 // (um Set, opcional) com as URLs de imagem já colocadas na tela, pra
 // quem chama poder evitar duplicar com o array "files" da questão.
+//
+// Duas situações bem diferentes pro mesmo "![](url)":
+// 1. O bloco INTEIRO é só a imagem (uma foto/gráfico ilustrando o
+//    contexto, sozinho entre linhas em branco) — vira um <img> de
+//    bloco, na sua própria "linha".
+// 2. A imagem aparece NO MEIO de uma frase/fórmula (comum em questões
+//    de Matemática, onde um símbolo de operação — tipo um "triângulo"
+//    ou "estrela" — vem como imagem porque não dá pra representar em
+//    texto puro: "x![](...)y = ..."). Nesse caso a imagem tem que ficar
+//    *inline*, no meio do mesmo parágrafo, ou a frase/fórmula quebra
+//    visualmente ao meio.
 function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
   if (!texto) return;
   const blocos = texto.split(/\n\s*\n+/);
@@ -178,32 +204,40 @@ function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
     const bloco = blocoBruto.trim();
     if (!bloco) return;
 
-    const partes = [];
+    const somenteImagem = bloco.match(IMG_MARKDOWN_BLOCO_RE);
+    if (somenteImagem) {
+      container.appendChild(textoImagem(somenteImagem[1]));
+      if (urlsRenderizadas) urlsRenderizadas.add(somenteImagem[1]);
+      return;
+    }
+
+    const p = document.createElement('p');
+    p.className = 'questao-paragrafo';
+
     let ultimoIndice = 0;
     let match;
     IMG_MARKDOWN_RE.lastIndex = 0;
     while ((match = IMG_MARKDOWN_RE.exec(bloco)) !== null) {
       if (match.index > ultimoIndice) {
-        partes.push({ tipo: 'texto', valor: bloco.slice(ultimoIndice, match.index) });
+        const span = document.createElement('span');
+        span.innerHTML = formatarNegrito(bloco.slice(ultimoIndice, match.index));
+        p.appendChild(span);
       }
-      partes.push({ tipo: 'imagem', url: match[1] });
+      const img = document.createElement('img');
+      img.src = match[1];
+      img.className = 'imagem-inline-simbolo';
+      img.alt = 'símbolo';
+      img.loading = 'lazy';
+      p.appendChild(img);
+      if (urlsRenderizadas) urlsRenderizadas.add(match[1]);
       ultimoIndice = IMG_MARKDOWN_RE.lastIndex;
     }
     if (ultimoIndice < bloco.length) {
-      partes.push({ tipo: 'texto', valor: bloco.slice(ultimoIndice) });
+      const span = document.createElement('span');
+      span.innerHTML = formatarNegrito(bloco.slice(ultimoIndice));
+      p.appendChild(span);
     }
-
-    partes.forEach((parte) => {
-      if (parte.tipo === 'imagem') {
-        container.appendChild(textoImagem(parte.url));
-        if (urlsRenderizadas) urlsRenderizadas.add(parte.url);
-      } else if (parte.valor.trim()) {
-        const p = document.createElement('p');
-        p.className = 'questao-paragrafo';
-        p.innerHTML = formatarNegrito(parte.valor.trim());
-        container.appendChild(p);
-      }
-    });
+    container.appendChild(p);
   });
 }
 

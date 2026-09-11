@@ -204,6 +204,18 @@ input[type="range"] { width: 100%; }
   border-radius: 6px;
 }
 
+/* Imagens usadas como simbolo dentro de uma frase/formula (ex.: um
+   operador matematico que nao da pra representar em texto puro) —
+   precisam ficar na mesma linha do texto ao redor, nao quebrar pra
+   um bloco proprio. */
+.imagem-inline-simbolo {
+  display: inline-block;
+  height: 1.1em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
 .alternativa {
   display: flex;
   align-items: flex-start;

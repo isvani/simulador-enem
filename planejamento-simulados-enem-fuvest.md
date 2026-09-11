@@ -615,6 +615,52 @@ fontes estarem prontas.
           performance a perder, já que é uma ferramenta local de uso
           pessoal, e evita esse tipo de confusão toda vez que o frontend
           for atualizado.
+        - **Segundo follow-up (mesmo dia): imagem no meio da frase
+          quebrando o layout.** Usuário reportou a questão enem-2021-152
+          (Álgebra) sem exibir bem nem o enunciado nem as alternativas.
+          Causa raiz diferente dos casos anteriores: essa questão usa
+          imagens como **símbolo de operação matemática no meio da
+          fórmula** — `x![](...)y = x² + xy − y²` (o "triângulo" e a
+          "estrela" da notação de operação customizada do enunciado são
+          imagens porque não dá pra representar esses símbolos em texto
+          puro). O fix anterior tratava TODA imagem Markdown como bloco
+          próprio (correto pra fotos/gráficos ilustrativos, mas errado
+          aqui — quebrava "x" e "y" em parágrafos/linhas separados,
+          destruindo a fórmula visualmente). Corrigido distinguindo dois
+          casos em `renderizarConteudoComMarkdown`: bloco onde o
+          conteúdo inteiro é só a imagem (ex.: uma foto do contexto) →
+          `<img>` de bloco, como antes; imagem no meio de uma
+          frase/fórmula → fica **inline**, dentro do mesmo `<p>`, com
+          CSS (`imagem-inline-simbolo`: `height: 1.1em; vertical-align:
+          middle`) pra parecer um caractere normal no meio do texto.
+        - **Terceiro achado, encontrado ao investigar o anterior:
+          asterisco escapado (`\*`) aparecia com a barra invertida
+          visível** — comum em texto que usa `*`/`**` como símbolo de
+          multiplicação ou marcador de rodapé em vez de negrito (ex.:
+          "x \* y", ou notas de rodapé "(\*) ... (\*\*) ..."). Afeta
+          **1.048 das 3.115 questões** (33% do banco). Corrigido em
+          `formatarNegrito`: protege `\*` com um marcador antes de
+          procurar pares de negrito (senão um `\*` isolado podia virar
+          metade de um `**` falso por acidente), só devolvendo o
+          asterisco de verdade no final.
+        - **Validação em escala, desta vez com harness próprio** (stub
+          de `document` rodando fora do navegador via Node, reproduzindo
+          a lógica real do `app.js`): 24.618 blocos de texto processados
+          (context + intro + alternativas de todo o banco), **0**
+          exceções, **0** Markdown de imagem sobrando, **0** `\*`
+          escapado sobrando. Restou só **1 questão** (enem-2011-38, numa
+          linha de citação bibliográfica) com um artefato cosmético
+          menor — a fonte tem `****Texto****` (quatro asteriscos, dado
+          malformado desde a origem), caso raro demais pra valer a pena
+          tratar especificamente.
+        - **Nota lateral sobre metodologia**: testar strings com
+          barra invertida escapada via heredoc do Bash (`bash -c
+          "...\\\\*..."`) alterou a string antes de chegar no Node,
+          mascarando um "bug" que não existia de verdade no código —
+          só apareceu ao reescrever o teste com a ferramenta Write (sem
+          o Bash no meio). Fica registrado: pra testar strings com
+          escape de barra invertida, escrever o script de teste como
+          arquivo em vez de inline via shell.
 - [x] **Fase 4.5 — Dashboard** — CONCLUÍDA (2026-09-11). `GET
       /dashboard/{nome}` implementado em `api/main.py`, aplicando as duas
       regras da seção 5.4: performance usa só a **última resposta** de
