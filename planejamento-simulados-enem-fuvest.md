@@ -602,6 +602,19 @@ fontes estarem prontas.
           rodei o regex de extração de imagem contra as 3.115 questões
           via `node`, achando 1.143 imagens inline no total, **0** URLs
           malformadas.
+        - **Follow-up (mesmo dia)**: usuário reportou outra questão
+          (enem-2023-165) ainda aparecendo com Markdown cru. A lógica em
+          si estava certa (testei o parsing dessa questão especificamente
+          e bateu certinho: texto → imagem → texto) — o problema real era
+          **cache do navegador**: `StaticFiles` do FastAPI não manda
+          nenhum cabeçalho anti-cache, então o navegador podia continuar
+          servindo a cópia antiga de `app.js` mesmo depois do deploy do
+          fix anterior, sem um hard-refresh. Corrigido com um middleware
+          em `api/main.py` (`Cache-Control: no-cache, no-store,
+          must-revalidate` em toda resposta) — sem ganho real de
+          performance a perder, já que é uma ferramenta local de uso
+          pessoal, e evita esse tipo de confusão toda vez que o frontend
+          for atualizado.
 - [x] **Fase 4.5 — Dashboard** — CONCLUÍDA (2026-09-11). `GET
       /dashboard/{nome}` implementado em `api/main.py`, aplicando as duas
       regras da seção 5.4: performance usa só a **última resposta** de

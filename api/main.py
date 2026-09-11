@@ -94,6 +94,19 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Simulador ENEM", lifespan=lifespan)
 
 
+@app.middleware("http")
+async def sem_cache(request, call_next):
+    """Sem isso, o navegador pode continuar servindo uma copia antiga de
+    web/app.js ou web/style.css depois de uma atualizacao no codigo,
+    mesmo apos um refresh normal (F5) — porque StaticFiles nao manda
+    cabecalho anti-cache por padrao. Como isso e uma ferramenta local,
+    de uso pessoal, nao ha ganho de performance real em cachear
+    agressivamente; prioriza sempre servir o conteudo atual."""
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
+
+
 @contextmanager
 def get_conn():
     conn = sqlite3.connect(DB_PATH)
