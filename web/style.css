@@ -187,10 +187,15 @@ input[type="range"] { width: 100%; }
 }
 
 .questao-contexto, .questao-intro {
-  white-space: pre-wrap;
-  line-height: 1.5;
   margin: 0 0 10px;
 }
+
+.questao-paragrafo {
+  line-height: 1.5;
+  margin: 0 0 10px;
+  white-space: pre-wrap;
+}
+.questao-paragrafo:last-child { margin-bottom: 0; }
 
 .questao-imagem {
   max-width: 100%;

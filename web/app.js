@@ -147,6 +147,66 @@ function textoImagem(url) {
   return img;
 }
 
+// O banco de questoes (legado, via enem-api) traz o texto com Markdown
+// simples embutido: **negrito** e imagens ![](url) intercaladas com o
+// texto. Sem isso virar HTML de verdade, aparece o asterisco/colchete
+// cru na tela. Deliberadamente NÃO tratamos itálico com "_..._" — os
+// patches manuais de 2024/2025 usam underscore como notação de índice
+// (ex.: "R_p", "R_c"), e um parser ingênuo de itálico interpretaria
+// esses underscores como marcação, corrompendo esse texto.
+const IMG_MARKDOWN_RE = /!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+
+function escaparHtml(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto;
+  return div.innerHTML;
+}
+
+function formatarNegrito(texto) {
+  return escaparHtml(texto).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+// Renderiza um texto que pode conter blocos de puro texto e imagens
+// Markdown misturados, no container dado. Preenche urlsRenderizadas
+// (um Set, opcional) com as URLs de imagem já colocadas na tela, pra
+// quem chama poder evitar duplicar com o array "files" da questão.
+function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
+  if (!texto) return;
+  const blocos = texto.split(/\n\s*\n+/);
+
+  blocos.forEach((blocoBruto) => {
+    const bloco = blocoBruto.trim();
+    if (!bloco) return;
+
+    const partes = [];
+    let ultimoIndice = 0;
+    let match;
+    IMG_MARKDOWN_RE.lastIndex = 0;
+    while ((match = IMG_MARKDOWN_RE.exec(bloco)) !== null) {
+      if (match.index > ultimoIndice) {
+        partes.push({ tipo: 'texto', valor: bloco.slice(ultimoIndice, match.index) });
+      }
+      partes.push({ tipo: 'imagem', url: match[1] });
+      ultimoIndice = IMG_MARKDOWN_RE.lastIndex;
+    }
+    if (ultimoIndice < bloco.length) {
+      partes.push({ tipo: 'texto', valor: bloco.slice(ultimoIndice) });
+    }
+
+    partes.forEach((parte) => {
+      if (parte.tipo === 'imagem') {
+        container.appendChild(textoImagem(parte.url));
+        if (urlsRenderizadas) urlsRenderizadas.add(parte.url);
+      } else if (parte.valor.trim()) {
+        const p = document.createElement('p');
+        p.className = 'questao-paragrafo';
+        p.innerHTML = formatarNegrito(parte.valor.trim());
+        container.appendChild(p);
+      }
+    });
+  });
+}
+
 function renderQuestao(questao, indice) {
   const cartao = document.createElement('article');
   cartao.className = 'questao-cartao';
@@ -170,18 +230,23 @@ function renderQuestao(questao, indice) {
   cartao.appendChild(cabecalho);
 
   if (questao.context) {
-    const contexto = document.createElement('p');
+    const contexto = document.createElement('div');
     contexto.className = 'questao-contexto';
-    contexto.textContent = questao.context;
+    const urlsRenderizadas = new Set();
+    renderizarConteudoComMarkdown(contexto, questao.context, urlsRenderizadas);
     cartao.appendChild(contexto);
+    // fallback: imagens que estao em "files" mas nao apareceram inline no texto
+    (questao.files || []).forEach((url) => {
+      if (!urlsRenderizadas.has(url)) cartao.appendChild(textoImagem(url));
+    });
+  } else {
+    (questao.files || []).forEach((url) => cartao.appendChild(textoImagem(url)));
   }
 
-  (questao.files || []).forEach((url) => cartao.appendChild(textoImagem(url)));
-
   if (questao.alternatives_introduction) {
-    const intro = document.createElement('p');
+    const intro = document.createElement('div');
     intro.className = 'questao-intro';
-    intro.textContent = questao.alternatives_introduction;
+    renderizarConteudoComMarkdown(intro, questao.alternatives_introduction);
     cartao.appendChild(intro);
   }
 
@@ -198,7 +263,9 @@ function renderQuestao(questao, indice) {
     const conteudo = document.createElement('span');
     conteudo.appendChild(document.createTextNode(`${alt.letter}) `));
     if (alt.text) {
-      conteudo.appendChild(document.createTextNode(alt.text));
+      const textoSpan = document.createElement('span');
+      textoSpan.innerHTML = formatarNegrito(alt.text);
+      conteudo.appendChild(textoSpan);
     } else if (alt.file) {
       const img = document.createElement('img');
       img.src = alt.file;
@@ -335,10 +402,14 @@ function renderResultado(resultado) {
     cartao.appendChild(status);
 
     if (q && q.context) {
-      const contexto = document.createElement('p');
+      const contexto = document.createElement('div');
       contexto.className = 'questao-contexto';
-      contexto.textContent = q.context;
+      const urlsRenderizadas = new Set();
+      renderizarConteudoComMarkdown(contexto, q.context, urlsRenderizadas);
       cartao.appendChild(contexto);
+      (q.files || []).forEach((url) => {
+        if (!urlsRenderizadas.has(url)) cartao.appendChild(textoImagem(url));
+      });
     }
 
     if (q) {
@@ -350,8 +421,11 @@ function renderResultado(resultado) {
 
         const conteudo = document.createElement('span');
         conteudo.appendChild(document.createTextNode(`${alt.letter}) `));
-        if (alt.text) conteudo.appendChild(document.createTextNode(alt.text));
-        else if (alt.file) {
+        if (alt.text) {
+          const textoSpan = document.createElement('span');
+          textoSpan.innerHTML = formatarNegrito(alt.text);
+          conteudo.appendChild(textoSpan);
+        } else if (alt.file) {
           const img = document.createElement('img');
           img.src = alt.file;
           img.className = 'alternativa-imagem';

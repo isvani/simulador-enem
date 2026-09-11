@@ -566,6 +566,42 @@ fontes estarem prontas.
         --port 8000`, a partir da raiz do projeto) pro usuário abrir
         `http://localhost:8000` e validar com os próprios olhos antes de
         considerar a fase realmente fechada.
+      - **Bug encontrado pelo usuário e corrigido (2026-09-11): Markdown
+        cru aparecendo na tela.** O banco (legado, via `enem-api`) traz
+        `context`/`alternatives_introduction`/alternativas com Markdown
+        embutido — `**negrito**` e imagens `![](url)` intercaladas no
+        meio do texto (além do array `files`, que às vezes diverge do
+        que está inline). O frontend só fazia `textContent = ...`, então
+        aparecia o asterisco/colchete cru na tela em vez de renderizar.
+        **Escala do problema**: 1.966 das 3.115 questões (63% do banco)
+        tinham Markdown no `context`. Corrigido com um parser mínimo
+        escrito à mão em `web/app.js`
+        (`renderizarConteudoComMarkdown`/`formatarNegrito`) — sem puxar
+        biblioteca externa, mantendo a decisão 7.2 de "HTML/CSS/JS puro,
+        sem framework":
+        - Converte `**negrito**` em `<strong>`, escapando o resto do
+          texto antes (evita injeção de HTML vindo do banco).
+        - Extrai `![](url)` (com ou sem `"title"` opcional depois da
+          URL, formato Markdown padrão) e insere como `<img>` de verdade
+          na posição correta dentro do texto, em vez de só jogar todas
+          as imagens de `files` no final — mantém a ordem de leitura
+          original (imagem → legenda → citação → próxima imagem, como no
+          exemplo real da Fase 2).
+        - **Decisão deliberada: itálico com `_texto_` NÃO é tratado.** Os
+          patches manuais de 2024/2025 (Fase 2) usam underscore como
+          notação de subíndice (`R_p`, `R_c`) — um parser ingênuo de
+          itálico interpretaria esses underscores como marcação e
+          corromperia esse texto. Como o Markdown real do legado combina
+          itálico só dentro de negrito (`**_texto_**`), o "custo" de não
+          tratar itálico é só underscore literal aparecendo ali, bem
+          menos grave que a alternativa.
+        - `files` continua sendo usado como fallback (só pras imagens que
+          não apareceram inline no texto — 7 questões do banco caem
+          nesse caso).
+        - Validado em escala (não só no exemplo que o usuário reportou):
+          rodei o regex de extração de imagem contra as 3.115 questões
+          via `node`, achando 1.143 imagens inline no total, **0** URLs
+          malformadas.
 - [x] **Fase 4.5 — Dashboard** — CONCLUÍDA (2026-09-11). `GET
       /dashboard/{nome}` implementado em `api/main.py`, aplicando as duas
       regras da seção 5.4: performance usa só a **última resposta** de
