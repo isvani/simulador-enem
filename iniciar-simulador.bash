@@ -2,8 +2,7 @@
 # iniciar-simulador.bash
 #
 # Gerencia o Simulador ENEM: instala dependencias, sobe/derruba o
-# servidor web, atualiza o banco de questoes e reseta historico de
-# usuario.
+# servidor web e reseta historico de usuario.
 #
 # Uso (Git Bash no Windows, sempre a partir da raiz do repositorio):
 #   bash iniciar-simulador.bash --start              Instala (so na 1a vez
@@ -13,18 +12,26 @@
 #                                                     plano; volta pro
 #                                                     prompt assim que
 #                                                     confirmar que subiu.
+#                                                     Se ja tinha uma
+#                                                     instancia rodando,
+#                                                     reinicia ela, pra
+#                                                     sempre servir o
+#                                                     dados/banco_questoes.json
+#                                                     mais recente (util
+#                                                     depois de editar/
+#                                                     substituir esse
+#                                                     arquivo por fora).
 #   bash iniciar-simulador.bash --stop               Para o servidor.
-#   bash iniciar-simulador.bash --update-questions    Re-roda a extracao/
-#                                                     patch do ENEM
-#                                                     2024/2025 e, se o
-#                                                     servidor estiver no
-#                                                     ar, reinicia ele pra
-#                                                     carregar o banco
-#                                                     atualizado.
 #   bash iniciar-simulador.bash --reset <nome>        Apaga o historico de
 #                                                     tentativas/respostas
 #                                                     daquele usuario
 #                                                     (pede confirmacao).
+#
+# Pra re-extrair as questoes de 2024/2025 dos PDFs (raro — so quando o
+# parser muda ou um PDF novo aparece), rode direto:
+#   .venv/Scripts/python.exe scripts/extract_enem_2024_2025.py
+#   .venv/Scripts/python.exe scripts/patch_enem_2024_2025_manual.py
+# e depois "bash iniciar-simulador.bash --start" pra recarregar.
 #
 # Variaveis de ambiente opcionais (valem pra todos os comandos):
 #   SIMULADOR_HOST=127.0.0.1   (padrao: 0.0.0.0, acessivel por outros
@@ -56,10 +63,10 @@ Uso: bash iniciar-simulador.bash <comando>
 
 Comandos:
   --start              Instala dependencias (so se precisar) e sobe o
-                        servidor em segundo plano.
+                        servidor em segundo plano — reiniciando uma
+                        instancia anterior se houver, pra sempre carregar
+                        o dados/banco_questoes.json mais recente.
   --stop               Para o servidor.
-  --update-questions   Re-roda a extracao/patch do ENEM 2024/2025 e
-                        reinicia o servidor, se estiver no ar.
   --reset <nome>       Apaga o historico daquele usuario (com confirmacao).
 
 Variaveis de ambiente opcionais: SIMULADOR_HOST, SIMULADOR_PORT.
@@ -274,73 +281,6 @@ cmd_stop() {
   esac
 }
 
-cmd_update_questions() {
-  garantir_venv_e_dependencias
-
-  cd "$PROJETO_DIR"
-
-  # Snapshot de antes de mexer em nada: extract_enem_2024_2025.py e
-  # patch_enem_2024_2025_manual.py re-processam questoes a partir dos
-  # PDFs/patches, sem saber quais delas ja foram classificadas
-  # (subtopic/difficulty, feito na Fase 3 por fora, via leitura). O
-  # proprio extract.py ja preserva classificacao existente pro caso
-  # comum, mas esse snapshot + reconciliacao depois e a rede de
-  # seguranca que cobre qualquer caminho que ainda zere alguma
-  # classificacao (ex.: as questoes com patch manual, que sao
-  # removidas e readicionadas do zero nesse processo).
-  local snapshot
-  snapshot="$(mktemp -t banco_snapshot.XXXXXX.json 2>/dev/null || echo "/tmp/banco_snapshot_$$.json")"
-  cp dados/banco_questoes.json "$snapshot"
-
-  echo ""
-  echo "Re-rodando extração do ENEM 2024/2025 (a partir dos PDFs já baixados em scripts/_pdf_cache/)..."
-  "$VENV_PYTHON" scripts/extract_enem_2024_2025.py
-  echo ""
-  echo "Reaplicando patches manuais (questões com notação matemática que o parser sozinho não recupera)..."
-  "$VENV_PYTHON" scripts/patch_enem_2024_2025_manual.py
-
-  echo ""
-  echo "Conferindo se alguma classificação (subtópico/dificuldade) que já existia foi perdida na atualização..."
-  "$VENV_PYTHON" - "$snapshot" "$PROJETO_DIR/dados/banco_questoes.json" <<'PYEOF'
-import json, sys
-
-snapshot_path, banco_path = sys.argv[1], sys.argv[2]
-antigo = {q["id"]: q for q in json.load(open(snapshot_path, encoding="utf-8"))}
-banco = json.load(open(banco_path, encoding="utf-8"))
-
-restauradas = 0
-for q in banco:
-    anterior = antigo.get(q["id"])
-    if anterior and anterior.get("subtopic") and not q.get("subtopic"):
-        q["subtopic"] = anterior["subtopic"]
-        q["difficulty"] = anterior["difficulty"]
-        restauradas += 1
-
-if restauradas:
-    with open(banco_path, "w", encoding="utf-8") as f:
-        json.dump(banco, f, ensure_ascii=False, indent=2)
-    print(f"Restaurada a classificação de {restauradas} questão(ões) que já tinha(m) sido classificada(s) antes e ficaria(m) sem classificação.")
-else:
-    print("Nenhuma classificação existente foi perdida.")
-PYEOF
-  rm -f "$snapshot"
-
-  echo ""
-  echo "Banco de questões atualizado: dados/banco_questoes.json"
-  echo "Nota: isso NÃO reprocessa o legado 2009-2023 (precisaria re-clonar"
-  echo "o repositório fonte, ver scripts/extract_enem_legacy.py) nem"
-  echo "reclassifica subtópico/dificuldade de questões novas (isso é feito"
-  echo "por leitura, não por script) — questões novas ficam com"
-  echo "subtopic/difficulty = null até serem classificadas."
-
-  verificar_e_parar_simulador_na_porta "$PORT"
-  if [ "$PORTA_STATUS" = "parou" ]; then
-    echo ""
-    echo "Reiniciando o servidor pra ele carregar o banco atualizado..."
-    cmd_start
-  fi
-}
-
 cmd_reset() {
   local nome="$1"
   garantir_venv_e_dependencias
@@ -404,9 +344,6 @@ case "$COMANDO" in
     ;;
   --stop)
     cmd_stop
-    ;;
-  --update-questions)
-    cmd_update_questions
     ;;
   --reset)
     NOME_RESET="${2:-}"

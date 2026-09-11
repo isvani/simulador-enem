@@ -669,8 +669,8 @@ fontes estarem prontas.
         - Mesma ressalva de sempre: não vi a tela renderizada num
           navegador de verdade.
       - **Extensão (2026-09-11): `iniciar-simulador.bash` virou uma CLI
-        de verdade**, com 4 comandos (antes só tinha um modo, que
-        bloqueava o terminal com `exec`):
+        de verdade**, com comandos (antes só tinha um modo, que bloqueava
+        o terminal com `exec`):
         - `--start`: instala dependências (só se `api/requirements.txt`
           + `scripts/requirements.txt` combinados mudaram desde a última
           instalação — trocou de "só primeira vez" pra um hash salvo em
@@ -679,28 +679,13 @@ fontes estarem prontas.
           `pymupdf` que entrou agora) e sobe o servidor **em segundo
           plano**, devolvendo o prompt assim que confirma que subiu (lê o
           log até achar "Uvicorn running", em vez de bloquear o
-          terminal). Log em `logs/servidor.log`.
+          terminal). Log em `logs/servidor.log`. Se já tinha uma
+          instância rodando na mesma porta, reinicia ela — o que também
+          serve pra recarregar `dados/banco_questoes.json` caso ele tenha
+          sido editado/substituído por fora enquanto o servidor estava
+          no ar (testado explicitamente: editei o banco com o servidor
+          de pé, rodei `--start` de novo, e a mudança apareceu na API).
         - `--stop`: para o servidor.
-        - `--update-questions`: re-roda `extract_enem_2024_2025.py` +
-          `patch_enem_2024_2025_manual.py` e reinicia o servidor (se
-          estava no ar). **Achado importante nesta extensão**: rodar
-          esses scripts de novo, do jeito que estavam, apagava a
-          classificação de subtópico/dificuldade (Fase 3) de qualquer
-          questão de 2024/2025 que já tivesse sido classificada — porque
-          a extração reconstrói as questões do zero com
-          `subtopic/difficulty = null`. Corrigido em duas camadas: (1)
-          `extract_enem_2024_2025.py` agora preserva subtopic/difficulty
-          de questões que já existiam no banco, ao re-mesclar; (2)
-          `--update-questions` também tira um snapshot do banco antes de
-          rodar os scripts e, depois, restaura a classificação de
-          qualquer questão que ainda assim tenha ficado sem — rede de
-          segurança que pegou especificamente as 6 questões do patch
-          manual (essas são removidas e re-adicionadas do zero nesse
-          processo, e o patch script sempre as recria com
-          `subtopic = null`). Testado de ponta a ponta: das 268 questões
-          de 2024/2025 já classificadas, todas as 268 continuaram
-          classificadas depois do `--update-questions`, sem duplicar
-          nem perder nenhuma questão do banco (3115 antes, 3115 depois).
         - `--reset <nome>`: apaga o histórico (tentativas + respostas) de
           um usuário, com confirmação (mostra quantas tentativas seriam
           apagadas antes de perguntar). Opera direto no
@@ -723,6 +708,29 @@ fontes estarem prontas.
           3. Saída de `print()` com acento (ex.: "Histórico") virava
              mojibake no console — corrigido com `export PYTHONUTF8=1`
              no topo do script.
+        - **Revisão no mesmo dia**: a primeira versão desta extensão
+          também tinha um `--update-questions` que re-rodava
+          `extract_enem_2024_2025.py` + `patch_enem_2024_2025_manual.py`
+          automaticamente. O usuário pediu pra remover — não precisa
+          dessa automação; re-extrair dos PDFs é raro (só quando o
+          parser muda ou aparece PDF novo) e deve ser feito rodando os
+          scripts na mão (documentado no cabeçalho do `.bash` e no
+          README). O papel de "`--start` atualiza o banco de questões"
+          é só reiniciar o servidor pra ele reler o
+          `banco_questoes.json` que já está no disco — não re-extrair
+          nada. **Susto no meio da revisão**: antes de entender o pedido
+          direito, cheguei a rodar `extract_enem_2024_2025.py` manualmente
+          pra testar a ideia original, o que apagou temporariamente as 6
+          questões do patch manual (2024-148/159/166/169/175/180) do
+          banco. Restaurei na hora com os valores de subtopic/difficulty
+          que já tinham sido confirmados antes nesta mesma sessão, e
+          conferi que `dados/banco_questoes.json` ficou byte-a-byte
+          idêntico ao commit anterior (`git diff` vazio) antes de seguir.
+          A correção em `extract_enem_2024_2025.py` que preserva
+          classificação existente ao re-mesclar (feita durante a versão
+          anterior desta extensão) **continua no código** — não faz mal
+          nenhum ficar lá, só não é mais chamada automaticamente por
+          nenhum comando do `.bash`.
 - [ ] **Fase 5 — Adicionar FUVEST** — Testar extração (1 ano, 1 caderno),
       escrever o parser específico, popular a base, classificar
       subtópico/dificuldade, validar que o motor de simulados já
