@@ -148,12 +148,9 @@ function textoImagem(url) {
 }
 
 // O banco de questoes (legado, via enem-api) traz o texto com Markdown
-// simples embutido: **negrito** e imagens ![](url) intercaladas com o
-// texto. Sem isso virar HTML de verdade, aparece o asterisco/colchete
-// cru na tela. Deliberadamente NÃO tratamos itálico com "_..._" — os
-// patches manuais de 2024/2025 usam underscore como notação de índice
-// (ex.: "R_p", "R_c"), e um parser ingênuo de itálico interpretaria
-// esses underscores como marcação, corrompendo esse texto.
+// simples embutido: **negrito**, _itálico_ e imagens ![](url)
+// intercaladas com o texto. Sem isso virar HTML de verdade, aparece o
+// asterisco/underscore/colchete cru na tela.
 const IMG_MARKDOWN_RE = /!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
 
 function escaparHtml(texto) {
@@ -169,13 +166,21 @@ function escaparHtml(texto) {
 // final.
 const MARCADOR_ASTERISCO_ESCAPADO = 'ASTERISCO';
 
-function formatarNegrito(texto) {
+function formatarTextoInline(texto) {
   const protegido = texto.replace(/\\\*/g, MARCADOR_ASTERISCO_ESCAPADO);
   let seguro = escaparHtml(protegido);
   // "s" (dotAll): alguns títulos vêm como "**Título \n**", com a quebra
-  // de linha dentro do próprio marcador de negrito — sem essa flag, "."
-  // não atravessa quebra de linha e o negrito não seria reconhecido.
+  // de linha dentro do próprio marcador — sem essa flag, "." não
+  // atravessa quebra de linha e a marcação não seria reconhecida.
   seguro = seguro.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
+  // Itálico com _texto_: só conta como ênfase se os "_" não estiverem
+  // colados a uma letra/número (regra do CommonMark pra "intraword
+  // emphasis" com underscore) — isso é o que permite renderizar itálico
+  // de verdade (ex.: rubrica de peça teatral, "_batendo com o pé_") sem
+  // corromper notação de subíndice como "R_p"/"R_c" (usada nos patches
+  // manuais de 2024/2025), onde o "_" fica colado às letras dos dois
+  // lados e por isso nunca casa com esse padrão.
+  seguro = seguro.replace(/(?<![\w])_(.+?)_(?![\w])/gs, '<em>$1</em>');
   return seguro.split(MARCADOR_ASTERISCO_ESCAPADO).join('*');
 }
 
@@ -220,7 +225,7 @@ function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
     while ((match = IMG_MARKDOWN_RE.exec(bloco)) !== null) {
       if (match.index > ultimoIndice) {
         const span = document.createElement('span');
-        span.innerHTML = formatarNegrito(bloco.slice(ultimoIndice, match.index));
+        span.innerHTML = formatarTextoInline(bloco.slice(ultimoIndice, match.index));
         p.appendChild(span);
       }
       const img = document.createElement('img');
@@ -234,7 +239,7 @@ function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
     }
     if (ultimoIndice < bloco.length) {
       const span = document.createElement('span');
-      span.innerHTML = formatarNegrito(bloco.slice(ultimoIndice));
+      span.innerHTML = formatarTextoInline(bloco.slice(ultimoIndice));
       p.appendChild(span);
     }
     container.appendChild(p);
@@ -298,7 +303,7 @@ function renderQuestao(questao, indice) {
     conteudo.appendChild(document.createTextNode(`${alt.letter}) `));
     if (alt.text) {
       const textoSpan = document.createElement('span');
-      textoSpan.innerHTML = formatarNegrito(alt.text);
+      textoSpan.innerHTML = formatarTextoInline(alt.text);
       conteudo.appendChild(textoSpan);
     } else if (alt.file) {
       const img = document.createElement('img');
@@ -457,7 +462,7 @@ function renderResultado(resultado) {
         conteudo.appendChild(document.createTextNode(`${alt.letter}) `));
         if (alt.text) {
           const textoSpan = document.createElement('span');
-          textoSpan.innerHTML = formatarNegrito(alt.text);
+          textoSpan.innerHTML = formatarTextoInline(alt.text);
           conteudo.appendChild(textoSpan);
         } else if (alt.file) {
           const img = document.createElement('img');

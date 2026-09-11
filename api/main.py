@@ -466,6 +466,13 @@ def get_dashboard(nome: str):
     return {"nome": nome, "performance": performance, "cobertura": cobertura, "tempo": tempo}
 
 
+# Imagens das questoes, baixadas do enem.dev pra dados/imagens/ (ver
+# scripts/baixar_imagens.py) — servidas localmente pra nao depender do
+# servidor de terceiros toda vez que alguem abre um simulado.
+IMAGENS_DIR = DADOS_DIR / "imagens"
+IMAGENS_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/imagens", StaticFiles(directory=str(IMAGENS_DIR)), name="imagens")
+
 # Servido por ultimo: qualquer rota nao reconhecida acima cai pros
 # arquivos estaticos de web/ (index.html na raiz).
 app.mount("/", StaticFiles(directory=str(WEB_DIR), html=True), name="web")

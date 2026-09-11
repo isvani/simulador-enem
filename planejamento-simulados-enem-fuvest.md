@@ -661,6 +661,52 @@ fontes estarem prontas.
           o Bash no meio). Fica registrado: pra testar strings com
           escape de barra invertida, escrever o script de teste como
           arquivo em vez de inline via shell.
+        - **Quarto follow-up (mesmo dia): itálico com `_..._` habilitado
+          de verdade.** Usuário reportou uma questão de teatro (rubricas
+          como `_arrepelando-se de raiva_`) sem renderizar itálico — a
+          decisão original desta sessão tinha sido *não* tratar itálico
+          de jeito nenhum, com medo de corromper a notação de subíndice
+          dos patches manuais (`R_p`, `R_c`). Resolvido com a regra do
+          CommonMark pra "intraword emphasis": só reconhece `_texto_`
+          como itálico quando o `_` de abertura/fechamento NÃO está
+          colado a uma letra/número (regex com lookbehind/lookahead
+          negativos, `(?<![\w])_(.+?)_(?![\w])`). Isso deixa
+          `_rubrica_` (cercado de espaço/pontuação) virar itálico
+          normalmente, e `R_p`/`R_c` (underscore colado às letras dos
+          dois lados) continuam literais, sem risco de corromper nada.
+          Revalidado em escala: 570 itálicos aplicados corretamente nas
+          3.115 questões, 0 tags `<em>` desbalanceadas.
+      - **Extensão (2026-09-11), pedido do usuário: imagens hospedadas
+        localmente em vez de apontar pro enem.dev.** Motivo: não
+        depender do servidor de terceiros ficar no ar toda vez que o
+        simulado é aberto. Novo script `scripts/baixar_imagens.py`:
+        localiza todas as URLs de imagem referenciadas no banco (em
+        `files[]`, `alternatives[].file`, e Markdown inline em
+        `context`/`alternatives_introduction`/`alternatives[].text`),
+        baixa cada uma pra `dados/imagens/<uuid>.<ext>` (nome do arquivo
+        já vem único do enem-api, sem colisão), e reescreve
+        `banco_questoes.json` trocando cada URL por `/imagens/<uuid>.<ext>`.
+        Idempotente (pula o que já foi baixado) e resiliente a falha
+        pontual (se uma URL falhar, mantém a URL externa original só
+        pra aquela imagem, em vez de referenciar um arquivo local que
+        não existe).
+        - `api/main.py` ganhou um mount novo, `/imagens` →
+          `dados/imagens/`, registrado antes do mount coringa de `web/`.
+        - Resultado real desta rodada: **1.857 imagens únicas**
+          referenciadas no banco inteiro, **todas baixadas com sucesso**
+          (0 falhas), **79,4 MB** em disco. Depois da reescrita, **0**
+          ocorrências de `enem.dev` restantes em `banco_questoes.json`.
+        - Validado batendo de verdade no servidor local (não só
+          checando se o arquivo existe em disco): amostra de 40 URLs de
+          imagem via HTTP contra `http://localhost:8000`, todas 200.
+        - `dados/imagens/` **é versionado** no git (não tem regra de
+          `.gitignore` pra ele) — mesma lógica de `banco_questoes.json`:
+          é conteúdo central do projeto, não build output; ~85MB é
+          tranquilo pro GitHub (bem abaixo do limite de 100MB por
+          arquivo, e são ~1.857 arquivos pequenos).
+        - `dados/questoes_pendentes_imagem.json` (as 12 questões com
+          alternativa gráfica ainda sem imagem anexada) não tinha
+          nenhuma URL de `enem.dev` pra trocar — não precisou de ajuste.
 - [x] **Fase 4.5 — Dashboard** — CONCLUÍDA (2026-09-11). `GET
       /dashboard/{nome}` implementado em `api/main.py`, aplicando as duas
       regras da seção 5.4: performance usa só a **última resposta** de

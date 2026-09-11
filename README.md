@@ -29,11 +29,16 @@ quando o parser muda ou aparece um PDF novo), rode direto:
 bash iniciar-simulador.bash --start
 ```
 
+As imagens das questões ficam salvas localmente em `dados/imagens/`
+(baixadas do enem.dev uma vez, via `scripts/baixar_imagens.py`) — o
+simulado não depende do servidor do enem.dev pra funcionar.
+
 ## Estrutura
 
 ```
-dados/    banco_questoes.json (banco de questões) e simulados.db (SQLite, não versionado)
+dados/    banco_questoes.json (banco de questões), imagens/ (imagens das
+          questões, baixadas do enem.dev) e simulados.db (SQLite, não versionado)
 api/      backend FastAPI
 web/      frontend estático (HTML/CSS/JS puro)
-scripts/  extração dos PDFs oficiais do INEP e patches manuais
+scripts/  extração dos PDFs oficiais do INEP, patches manuais e download de imagens
 ```
