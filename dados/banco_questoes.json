@@ -103059,7 +103059,7 @@
     "subtopic": "Matemática Financeira",
     "difficulty": "facil",
     "language": null,
-    "context": "Aplicativos que gerenciam serviços de hospedagem  \ntêm ganhado espaço no Brasil e no mundo por oferecer  \nopções diferenciadas em termos de localização e valores  \nde hospedagem. Em um desses aplicativos, o preço P a  \nser pago pela hospedagem é calculado considerando um  \npreço por diária d, acrescido de uma taxa fixa de limpeza L  \ne de uma taxa de serviço. Essa taxa de serviço é um valor  \npercentual s calculado sobre o valor pago pelo total das  \ndiárias.",
+    "context": "Aplicativos que gerenciam serviços de hospedagem têm ganhado espaço no Brasil e no mundo por oferecer opções diferenciadas em termos de localização e valores de hospedagem. Em um desses aplicativos, o preço P a ser pago pela hospedagem é calculado considerando um preço por diária d, acrescido de uma taxa fixa de limpeza L e de uma taxa de serviço. Essa taxa de serviço é um valor percentual s calculado sobre o valor pago pelo total das diárias.",
     "alternatives_introduction": "Nessa situação, o preço a ser pago ao aplicativo para uma hospedagem de n diárias pode ser obtido pela expressão",
     "alternatives": [
       {
