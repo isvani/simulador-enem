@@ -27959,7 +27959,7 @@
     "subtopic": "Funções",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Certo vendedor tem seu salário mensal calculado da seguinte maneira: ele ganha um valor fixo de R$ 750,00, mais uma comissão de R$ 3,00 para cada produto vendido. Caso ele venda mais de 100 produtos, sua comissão passa a ser de R$ 9,00 para cada produto vendido, a partir do 101º produto vendido.",
     "alternatives_introduction": "Com essas informações, o gráfico que melhor representa a relação entre salário e o número de produtos vendidos é",
     "alternatives": [
       {
@@ -31334,7 +31334,7 @@
     "subtopic": "Física (Mecânica)",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Para melhorar a mobilidade urbana na rede metroviária é necessário minimizar o tempo entre estações. Para isso a administração do metrô de uma grande cidade adotou o seguinte procedimento entre duas estações: a locomotiva parte do repouso com aceleração constante por um terço do tempo de percurso, mantém a velocidade constante por outro terço e reduz sua velocidade com desaceleração constante no trecho final, até parar.",
     "alternatives_introduction": "Qual é o gráfico de posição (eixo vertical) em função do tempo (eixo horizontal) que representa o movimento desse trem?",
     "alternatives": [
       {
@@ -35540,7 +35540,7 @@
     "subtopic": "Razão/Proporção/Porcentagem",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Uma torneira não foi fechada corretamente e ficou pingando, da meia-noite às seis horas da manhã, com a frequência de uma gota a cada três segundos. Sabe-se que cada gota d’água tem volume de 0,2 mL.",
     "alternatives_introduction": "Qual foi o valor mais aproximado do total de água desperdiçada nesse período, em litros?",
     "alternatives": [
       {
@@ -44685,7 +44685,7 @@
     "subtopic": "Razão/Proporção/Porcentagem",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Uma organização não governamental divulgou um levantamento de dados realizado em algumas cidades brasileiras sobre saneamento básico. Os resultados indicam que somente 36% do esgoto gerado nessas cidades é tratado, o que mostra que 8 bilhões de litros de esgoto sem nenhum tratamento são lançados todos os dias nas águas.\n\nUma campanha para melhorar o saneamento básico nessas cidades tem como meta a redução da quantidade de esgoto lançado nas águas diariamente, sem tratamento, para 4 bilhões de litros nos próximos meses.",
     "alternatives_introduction": "Se o volume de esgoto gerado permanecer o mesmo e a meta dessa campanha se concretizar, o percentual de esgoto tratado passará a ser",
     "alternatives": [
       {
@@ -44777,7 +44777,7 @@
     "subtopic": "Estatística e Probabilidade",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Boliche é um jogo em que se arremessa uma bola sobre uma pista para atingir dez pinos, dispostos em uma formação de base triangular, buscando derrubar o maior número de pinos. A razão entre o total de vezes em que o jogador derruba todos os pinos e o número de jogadas determina seu desempenho.\n\nEm uma disputa entre cinco jogadores, foram obtidos os seguintes resultados:\n\nJogador I – Derrubou todos os pinos 50 vezes em 85 jogadas.\nJogador II – Derrubou todos os pinos 40 vezes em 65 jogadas.\nJogador III – Derrubou todos os pinos 20 vezes em 65 jogadas.\nJogador IV – Derrubou todos os pinos 30 vezes em 40 jogadas.\nJogador V – Derrubou todos os pinos 48 vezes em 90 jogadas.",
     "alternatives_introduction": "Qual desses jogadores apresentou maior desempenho?",
     "alternatives": [
       {
@@ -45008,7 +45008,7 @@
     "subtopic": "Geometria Plana",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Uma pessoa possui um espaço retangular de lados 11,5 m e 14 m no quintal de sua casa e pretende fazer um pomar doméstico de maçãs. Ao pesquisar sobre o plantio dessa fruta, descobriu que as mudas de maçã devem ser plantadas em covas com uma única muda e com espaçamento mínimo de 3 metros entre elas e entre elas e as laterais do terreno. Ela sabe que conseguirá plantar um número maior de mudas em seu pomar se dispuser as covas em filas alinhadas paralelamente ao lado de maior extensão.",
     "alternatives_introduction": "O número máximo de mudas que essa pessoa poderá plantar no espaço disponível é",
     "alternatives": [
       {
@@ -45239,7 +45239,7 @@
     "subtopic": "Estatística e Probabilidade",
     "difficulty": "dificil",
     "language": null,
-    "context": null,
+    "context": "Um cliente de uma videolocadora tem o hábito de alugar dois filmes por vez. Quando os devolve, sempre pega outros dois filmes e assim sucessivamente. Ele soube que a videolocadora recebeu alguns lançamentos, sendo 8 filmes de ação, 5 de comédia e 3 de drama e, por isso, estabeleceu uma estratégia para ver todos esses 16 lançamentos. Inicialmente alugará, em cada vez, um filme de ação e um de comédia. Quando se esgotarem as possibilidades de comédia, o cliente alugará um filme de ação e um de drama, até que todos os lançamentos sejam vistos e sem que nenhum filme seja repetido.",
     "alternatives_introduction": "De quantas formas distintas a estratégia desse cliente poderá ser posta em prática?",
     "alternatives": [
       {
@@ -45837,7 +45837,7 @@
     "subtopic": "Razão/Proporção/Porcentagem",
     "difficulty": "dificil",
     "language": null,
-    "context": null,
+    "context": "Os vidros para veículos produzidos por certo fabricante têm transparências entre 70% e 90%, dependendo do lote fabricado. Isso significa que, quando um feixe luminoso incide no vidro, uma parte entre 70% e 90% da luz consegue atravessá-lo. Os veículos equipados com vidros desse fabricante terão instaladas, nos vidros das portas, películas protetoras cuja transparência, dependendo do lote fabricado, estará entre 50% e 70%. Considere que uma porcentagem P da intensidade da luz, proveniente de uma fonte externa, atravessa o vidro e a película.",
     "alternatives_introduction": "De acordo com as informações, o intervalo das porcentagens que representam a variação total possível de P é",
     "alternatives": [
       {
@@ -45976,7 +45976,7 @@
     "subtopic": "Aritmética",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Diariamente, uma residência consome 20 160 Wh. Essa residência possui 100 células solares retangulares (dispositivos capazes de converter a luz solar em energia elétrica) de dimensões 6 cm × 8 cm. Cada uma das tais células produz, ao longo do dia, 24 Wh por centímetro de diagonal. O proprietário dessa residência quer produzir, por dia, exatamente a mesma quantidade de energia que sua casa consome.",
     "alternatives_introduction": "Qual deve ser a ação desse proprietário para que ele atinja o seu objetivo?",
     "alternatives": [
       {
@@ -46021,7 +46021,7 @@
     "subtopic": "Álgebra",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Uma pessoa compra semanalmente, numa mesma loja, sempre a mesma quantidade de um produto que custa R$ 10,00 a unidade. Como já sabe quanto deve gastar, leva sempre R$ 6,00 a mais do que a quantia necessária para comprar tal quantidade, para o caso de eventuais despesas extras. Entretanto, um dia, ao chegar à loja, foi informada de que o preço daquele produto havia aumentado 20%. Devido a esse reajuste, concluiu que o dinheiro levado era a quantia exata para comprar duas unidades a menos em relação à quantidade habitualmente comprada.",
     "alternatives_introduction": "A quantia que essa pessoa levava semanalmente para fazer a compra era",
     "alternatives": [
       {
@@ -53279,7 +53279,7 @@
     "subtopic": "Matemática Financeira",
     "difficulty": "dificil",
     "language": null,
-    "context": null,
+    "context": "Um casal realiza um financiamento imobiliário de R$ 180 000,00, a ser pago em 360 prestações mensais, com taxa de juros efetiva de 1% ao mês. A primeira prestação é paga um mês após a liberação dos recursos e o valor da prestação mensal é de R$ 500,00 mais juro de 1% sobre o saldo devedor (valor devido antes do pagamento). Observe que, a cada pagamento, o saldo devedor se reduz em R$ 500,00 e considere que não há prestação em atraso.",
     "alternatives_introduction": "Efetuando o pagamento dessa forma, o valor, em reais, a ser pago ao banco na décima prestação é de",
     "alternatives": [
       {
@@ -53786,7 +53786,7 @@
     "subtopic": "Aritmética",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Alguns exames médicos requerem uma ingestão de água maior do que a habitual. Por recomendação médica, antes do horário do exame, uma paciente deveria ingerir 1 copo de água de 150 mililitros a cada meia hora, durante as 10 horas que antecederiam um exame. A paciente foi a um supermercado comprar água e verificou que havia garrafas dos seguintes tipos:\n\n• Garrafa I: 0,15 litro\n\n• Garrafa II: 0,30 litro\n\n• Garrafa III: 0,75 litro\n\n• Garrafa IV: 1,50 litro\n\n• Garrafa V: 3,00 litros\n\nA paciente decidiu comprar duas garrafas do mesmo tipo, procurando atender à recomendação médica e, ainda, de modo a consumir todo o líquido das duas garrafas antes do exame.",
     "alternatives_introduction": "Qual o tipo de garrafa escolhida pela paciente?",
     "alternatives": [
       {
@@ -54154,7 +54154,7 @@
     "subtopic": "Aritmética",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Deseja-se comprar lentes para óculos. As lentes devem ter espessuras mais próximas possíveis da medida 3 mm. No estoque de uma loja, há lentes de espessuras: 3,10 mm; 3,021 mm; 2,96 mm; 2,099 mm e 3,07 mm.",
     "alternatives_introduction": "Se as lentes forem adquiridas nessa loja, a espessura escolhida será, em milímetros, de",
     "alternatives": [
       {
@@ -54293,7 +54293,7 @@
     "subtopic": "Funções",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Após realizar uma pesquisa de mercado, uma operadora de telefonia celular ofereceu aos clientes que utilizavam até 500 ligações ao mês o seguinte plano mensal: um valor fixo de R$ 12,00 para os clientes que fazem até 100 ligações ao mês. Caso o cliente faça mais de 100 ligações, será cobrado um valor adicional de R$ 0,10 por ligação, a partir da 101ª até a 300ª; e caso realize entre 300 e 500 ligações, será cobrado um valor fixo mensal de R$ 32,00.",
     "alternatives_introduction": "Com base nos elementos apresentados, o gráfico que melhor representa a relação entre o valor mensal pago nesse plano e o número de ligações feitas é:",
     "alternatives": [
       {
@@ -54430,7 +54430,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": null,
+    "context": "Uma competição esportiva envolveu 20 equipes com 10 atletas cada. Uma denúncia à organização dizia que um dos atletas havia utilizado substância proibida. Os organizadores, então, decidiram fazer um exame antidoping. Foram propostos três modos diferentes para escolher os atletas que irão realizá-lo:\n\nModo I: sortear três atletas dentre todos os participantes;\nModo II: sortear primeiro uma das equipes e, desta, sortear três atletas;\nModo III: sortear primeiro três equipes e, então, sortear um atleta de cada uma dessas três equipes.\n\nConsidere que todos os atletas têm igual probabilidade de serem sorteados e que P(I), P(II) e P(III) sejam as probabilidades de o atleta que utilizou a substância proibida seja um dos escolhidos para o exame no caso do sorteio ser feito pelo modo I, II ou III.",
     "alternatives_introduction": "Comparando-se essas probabilidades, obtém-se",
     "alternatives": [
       {
@@ -55974,7 +55974,7 @@
     "subtopic": "Biologia (Ecologia e Meio Ambiente)",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "A indústria têxtil utiliza grande quantidade de corantes no processo de tingimento dos tecidos. O escurecimento das águas dos rios causado pelo despejo desses corantes pode desencadear uma série de problemas no ecossistema aquático.",
     "alternatives_introduction": "Considerando esse escurecimento das águas, o impacto negativo inicial que ocorre é o(a)",
     "alternatives": [
       {
@@ -61864,7 +61864,7 @@
     "subtopic": "Funções",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Um posto de saúde registrou a quantidade de vacinas aplicadas contra febre amarela nos últimos cinco meses:\n\n• 1º mês: 21;\n• 2º mês: 22;\n• 3º mês: 25;\n• 4º mês: 31;\n• 5º mês: 21.\n\nNo início do primeiro mês, esse posto de saúde tinha 228 vacinas contra febre amarela em estoque. A política de reposição do estoque prevê a aquisição de novas vacinas, no início do sexto mês, de tal forma que a quantidade inicial em estoque para os próximos meses seja igual a 12 vezes a média das quantidades mensais dessas vacinas aplicadas nos últimos cinco meses.",
     "alternatives_introduction": "Para atender essas condições, a quantidade de vacinas contra febre amarela que o posto de saúde deve adquirir no início do sexto mês é",
     "alternatives": [
       {
@@ -62095,7 +62095,7 @@
     "subtopic": "Razão/Proporção/Porcentagem",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Densidade absoluta (d) é a razão entre a massa de um corpo e o volume por ele ocupado. Um professor propôs à sua turma que os alunos analisassem a densidade de três corpos: dA, dB, dC. Os alunos verificaram que o corpo A possuía 1,5 vez a massa do corpo B e esse, por sua vez, tinha 3/4 da massa do corpo C. Observaram, ainda, que o volume do corpo A era o mesmo do corpo B e 20% maior do que o volume do corpo C.",
     "alternatives_introduction": "Após a análise, os alunos ordenaram corretamente as densidades desses corpos da seguinte maneira",
     "alternatives": [
       {
@@ -62187,7 +62187,7 @@
     "subtopic": "Geometria Plana",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Sob a orientação de um mestre de obras, João e Pedro trabalharam na reforma de um edifício. João efetuou reparos na parte hidráulica nos andares 1, 3, 5, 7, e assim sucessivamente, de dois em dois andares. Pedro trabalhou na parte elétrica nos andares 1, 4, 7, 10, e assim sucessivamente, de três em três andares. Coincidentemente, terminaram seus trabalhos no último andar. Na conclusão da reforma, o mestre de obras informou, em seu relatório, o número de andares do edifício. Sabe-se que, ao longo da execução da obra, em exatamente 20 andares, foram realizados reparos nas partes hidráulica e elétrica por João e Pedro.",
     "alternatives_introduction": "Qual é o número de andares desse edifício?",
     "alternatives": [
       {
@@ -64792,7 +64792,7 @@
     "subtopic": "Física (Termologia, Óptica e Ondas)",
     "difficulty": "dificil",
     "language": null,
-    "context": null,
+    "context": "Durante a primeira fase do projeto de uma usina de geração de energia elétrica, os engenheiros da equipe de avaliação de impactos ambientais procuram saber se esse projeto está de acordo com as normas ambientais. A nova planta estará localizada à beira de um rio, cuja temperatura média da água é de 25 °C, e usará a sua água somente para refrigeração. O projeto pretende que a usina opere com 1,0 MW de potência elétrica e, em razão de restrições técnicas, o dobro dessa potência será dissipada por seu sistema de arrefecimento, na forma de calor. Para atender a resolução número 430, de 13 de maio de 2011, do Conselho Nacional do Meio Ambiente, com uma ampla margem de segurança, os engenheiros determinaram que a água só poderá ser devolvida ao rio com um aumento de temperatura de, no máximo, 3 °C em relação à temperatura da água do rio captada pelo sistema de arrefecimento. Considere o calor específico da água igual a 4 kJ/(kg °C).",
     "alternatives_introduction": "Para atender essa determinação, o valor minimo do fluxo de água, em kg/s, para a refrigeração da usina deve ser mais próximo de",
     "alternatives": [
       {
@@ -65208,7 +65208,7 @@
     "subtopic": "Biologia (Ecologia e Meio Ambiente)",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Ao percorrer o trajeto de uma cadeia alimentar, o carbono, elemento essencial e majoritário da matéria orgânica que compõe os indivíduos, ora se encontra em sua forma inorgânica, ora se encontra em sua forma orgânica. Em uma cadeia alimentar composta por fitoplâncton, zooplâncton, moluscos, crustáceos e peixes ocorre a transição desse elemento da forma inorgânica para a orgânica.",
     "alternatives_introduction": "Em qual grupo de organismos ocorre essa transição?",
     "alternatives": [
       {
@@ -71426,7 +71426,7 @@
     "subtopic": "Estatística e Probabilidade",
     "difficulty": "medio",
     "language": null,
-    "context": null,
+    "context": "Um morador de uma região metropolitana tem 50% de probabilidade de atrasar-se para o trabalho quando chove na região; caso não chova, sua probabilidade de atraso é de 25%. Para um determinado dia, o serviço de meteorologia estima em 30% a probabilidade da ocorrência de chuva nessa região.",
     "alternatives_introduction": "Qual é a probabilidade de esse morador se atrasar para o serviço no dia para o qual foi dada a estimativa de chuva?",
     "alternatives": [
       {
@@ -71516,7 +71516,7 @@
     "subtopic": "Funções",
     "difficulty": "dificil",
     "language": null,
-    "context": null,
+    "context": "Às 17 h 15 min começa uma forte chuva, que cai com intensidade constante. Uma piscina em forma de um paralelepípedo retângulo, que se encontrava inicialmente vazia, começa a acumular a água da chuva e, às 18 horas, o nível da água em seu interior alcança 20 cm de altura. Nesse instante, é aberto o registro que libera o escoamento da água por um ralo localizado no fundo dessa piscina, cuja vazão é constante. Às 18 h 40 min a chuva cessa e, nesse exato instante, o nível da água na piscina baixou para 15 cm.",
     "alternatives_introduction": "O instante em que a água dessa piscina terminar de escoar completamente está compreendido entre",
     "alternatives": [
       {
