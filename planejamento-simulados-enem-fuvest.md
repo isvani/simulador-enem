@@ -474,7 +474,7 @@ fontes estarem prontas.
         deveriam seguir a mesma convenção quando forem completadas
         (recortar a alternativa da página rasterizada, salvar em
         `dados/imagens/` local, preencher `file` com o caminho).
-- [ ] **Fase 3 — Classificação v1** — EM ANDAMENTO (iniciada em
+- [x] **Fase 3 — Classificação v1** — CONCLUÍDA (2026-09-12, iniciada em
       2026-09-11). Classificar por subtópico e dificuldade, **todas as 4
       áreas**. Decisão de execução tomada nesta sessão: rodar **uma área
       por vez**, sempre pedindo confirmação ao usuário antes de começar a
@@ -506,7 +506,8 @@ fontes estarem prontas.
         Linguagem Verbal e Não Verbal 62, TIC 51, Educação Física 35,
         Gramática Normativa 27. Dificuldade: médio 440, difícil 191,
         fácil 156.
-      - [ ] Ciências Humanas (899 questões) — PAUSADA. O usuário decidiu
+      - [x] Ciências Humanas (771 questões após correção de área;
+        899 originalmente) — CONCLUÍDA (2026-09-12). O usuário decidiu
         seguir pra Fase 4 antes de terminar essa última área; retomar
         pelo mesmo padrão (Workflow, lotes de 20, ver script usado nas
         outras 3 áreas) quando for a vez. Enquanto isso, ~899 questões de
@@ -514,6 +515,99 @@ fontes estarem prontas.
         banco — o motor de simulados (Fase 4) precisa lidar bem com isso
         (não excluir a área do simulado, só não conseguir filtrar por
         subtópico/dificuldade nela ainda).
+      - **Bug de dados descoberto e corrigido ao retomar esta área
+        (2026-09-12): campo `area` errado em 141 questões do legado
+        2009-2023.** Ao rodar os 45 lotes de classificação de subtópico
+        de Ciências Humanas, vários agentes reportaram de forma
+        consistente questões de matemática/física/química/biologia/
+        linguagens dentro do lote de "humanas". Investigação confirmou
+        que o bug está na fonte (`yunger7/enem-api`): o campo
+        `discipline` de cada `details.json` já vem errado de lá, não é
+        algo introduzido pela nossa extração (`extract_enem_legacy.py`
+        só copia `raw["discipline"]` verbatim).
+        - **Causa raiz identificada**: a ordem das 4 áreas por número de
+          questão (`index`) mudou em 2017. Até 2016: Dia 1 = Ciências
+          Humanas (1-45) + Ciências da Natureza (46-90), Dia 2 =
+          Linguagens (91-135) + Matemática (136-180). De 2017 em diante:
+          Dia 1 = Linguagens (1-45) + Ciências Humanas (46-90), Dia 2 =
+          Ciências da Natureza (91-135) + Matemática (136-180) — a
+          ordem "atual" que todo mundo conhece. Uma primeira hipótese
+          (assumir a ordem pós-2017 pra todos os anos) apontou ~1.131
+          questões suspeitas, exagerado por essa mudança de estrutura;
+          recalculando por ano com a ordem certa, o número real caiu pra
+          **225 candidatas** (~8% das 2.757 do legado). 2009 especificamente
+          teve estrutura própria (matérias intercaladas dentro do mesmo
+          caderno, não em blocos contíguos), então parte do ruído ali é
+          da heurística de índice, não bug de verdade.
+        - **Verificação**: as 225 candidatas foram revisadas por
+          conteúdo real (12 agentes, lotes de ~20, decidindo entre as 4
+          áreas oficiais do ENEM a partir do contexto/alternativas, sem
+          confiar cegamente nem no `discipline` da fonte nem na heurística
+          de índice). Resultado: **141 correções reais** e 84 alarmes
+          falsos da heurística (a área já estava certa, só a posição do
+          índice enganava). Direção das correções: ciencias-humanas→
+          linguagens 55, ciencias-humanas→ciencias-natureza 46,
+          ciencias-humanas→matematica 28, matematica→ciencias-natureza 6,
+          ciencias-natureza→matematica 5, linguagens→ciencias-humanas 1.
+          3 casos de baixa confiança sinalizados pelos agentes pra
+          eventual checagem manual futura: enem-2010-125, enem-2010-126,
+          enem-2016-90.
+        - **Aplicado em `dados/banco_questoes.json`**: `area` corrigida
+          nas 141 questões; `subtopic`/`difficulty` resetados pra `null`
+          nelas (a classificação antiga, quando existia, foi feita sob a
+          área errada e não vale mais). Banco final por área:
+          ciencias-humanas 771 (era 899), ciencias-natureza 748 (era
+          701), linguagens 841 (era 787), matematica 755 (era 728) — total
+          seguue 3.115.
+        - **Impacto no restante da Fase 3**: as fases de Matemática,
+          Linguagens e Ciências da Natureza já dadas como "CONCLUÍDAS"
+          ganharam questões novas sem classificação (vindas da correção):
+          matemática +33, linguagens +55, ciencias-natureza +52 — essas
+          3 áreas precisam de uma rodada de classificação leve (mesmo
+          padrão, lotes de 20) só pra esse resíduo antes de considerar a
+          Fase 3 realmente 100% fechada. Ciências Humanas cai de 899 pra
+          771 questões a classificar (as 45 lotes já rodados contra o
+          conjunto antigo de 899 não são reaproveitáveis — o conjunto
+          mudou; a classificação de subtópico de Humanas ainda não tinha
+          sido mesclada no banco quando o bug foi descoberto, então nada
+          foi perdido, só não é reaproveitável).
+        - **Script `extract_enem_legacy.py` não foi alterado** — o bug é
+          só nos dados de origem (que não são re-extraídos rotineiramente),
+          não na lógica do script. Se o repositório `yunger7/enem-api` for
+          re-clonado no futuro (ex.: pra pegar anos novos), vale rodar essa
+          mesma auditoria de novo antes de confiar no `discipline` bruto.
+        - **Resíduo das 3 áreas já "concluídas" também fechado
+          (2026-09-12)**: as 140 questões que mudaram de área (33
+          matemática, 55 linguagens, 52 ciências da natureza) foram
+          classificadas por subtópico/dificuldade no mesmo padrão (8
+          lotes de agentes, ~20 questões cada, schema validado). 0 erros,
+          0 subtópico fora da lista permitida. Matemática, Linguagens e
+          Ciências da Natureza estão de novo 100% classificadas (755,
+          841 e 748 questões respectivamente).
+        - **Correção sobre reaproveitamento dos 37 lotes de Humanas
+          (2026-09-12): o usuário apontou que o trabalho não estava
+          totalmente perdido**, e estava certo — verificação mostrou que,
+          dos 45 arquivos de resultado esperados, **44 na verdade foram
+          escritos em disco** (só o lote 044 realmente não chegou a
+          rodar); os 7 lotes marcados como "failed" por rate limit
+          tinham terminado a classificação e salvo o arquivo antes de
+          falhar só na etapa final de resumo em texto. Reaproveitando
+          esses resultados (filtrando por id ainda pertencente a
+          `ciencias-humanas` após a correção de área, descartando os que
+          migraram para outra área): **751 das 771 questões** vieram
+          direto dos lotes antigos, sem gastar um único agente novo.
+          Restaram só 20 questões genuinamente sem classificação (as 19
+          do lote 044 que nunca rodou + a 1 questão que passou a ser
+          `ciencias-humanas` pela correção de área) — resolvidas com um
+          lote final único.
+      - **Fase 3 — CONCLUÍDA de fato (2026-09-12).** Banco inteiro
+        (3.115 questões, 4 áreas) com `subtopic`/`difficulty`
+        preenchidos, 0 pendências. Distribuição final de Ciências
+        Humanas (771 questões): História do Brasil 150, Geografia
+        Física e Meio Ambiente 121, Sociologia 110, Filosofia 107,
+        História Geral 92, Geografia Humana e Urbana 89, Geopolítica e
+        Globalização 54, Cidadania/Direitos Humanos e Ética 48.
+        Dificuldade: médio 502, difícil 154, fácil 115.
       - [x] **Ciências da Natureza (701 questões) — CONCLUÍDA (2026-09-11)**.
         Mesmo padrão (Workflow, 36 agentes, 1 por lote de 20 questões).
         0 erros, 0 lotes vazios, todas as 701 classificadas dentro da
