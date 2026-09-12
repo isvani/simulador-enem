@@ -25,6 +25,12 @@ const estado = {
   filtrosUsados: null,
   tempoUltimaResposta: null,
   temposGastos: {},
+  quantidadeSolicitada: null,
+  totalDisponivel: null,
+  veioDoHistorico: false,
+  historicoNomeAtual: null,
+  cronometroInicio: null,
+  cronometroIntervalId: null,
 };
 
 const els = {
@@ -40,6 +46,7 @@ const els = {
   telaResultado: document.getElementById('tela-resultado'),
   listaQuestoes: document.getElementById('lista-questoes'),
   contadorSimulado: document.getElementById('contador-simulado'),
+  cronometroSimulado: document.getElementById('cronometro-simulado'),
   btnCorrigir: document.getElementById('btn-corrigir'),
   btnCorrigirRodape: document.getElementById('btn-corrigir-rodape'),
   resumoAcertos: document.getElementById('resumo-acertos'),
@@ -47,15 +54,23 @@ const els = {
   btnRefazer: document.getElementById('btn-refazer'),
   btnVerDashboard: document.getElementById('btn-ver-dashboard'),
   btnVerDashboardResultado: document.getElementById('btn-ver-dashboard-resultado'),
+  btnVoltarHistorico: document.getElementById('btn-voltar-historico'),
   btnDashboardVoltar: document.getElementById('btn-dashboard-voltar'),
   dashboardNome: document.getElementById('dashboard-nome'),
   dashboardVazio: document.getElementById('dashboard-vazio'),
   dashboardGeral: document.getElementById('dashboard-geral'),
   tempoGeral: document.getElementById('tempo-geral'),
+  btnVerHistorico: document.getElementById('btn-ver-historico'),
+  telaHistorico: document.getElementById('tela-historico'),
+  historicoNome: document.getElementById('historico-nome'),
+  historicoVazio: document.getElementById('historico-vazio'),
+  historicoLista: document.getElementById('historico-lista'),
+  btnHistoricoVoltar: document.getElementById('btn-historico-voltar'),
+  btnResetarHistorico: document.getElementById('btn-resetar-historico'),
 };
 
 function mostrarTela(id) {
-  ['tela-inicial', 'tela-simulado', 'tela-resultado', 'tela-dashboard'].forEach((t) => {
+  ['tela-inicial', 'tela-simulado', 'tela-resultado', 'tela-historico', 'tela-dashboard'].forEach((t) => {
     document.getElementById(t).hidden = t !== id;
   });
   window.scrollTo(0, 0);
@@ -320,6 +335,19 @@ function renderQuestao(questao, indice) {
   return cartao;
 }
 
+// A API devolve erro.detail como string (ex.: "Nenhuma questão encontrada")
+// ou, em erros de validação do Pydantic (422), como uma lista de objetos
+// {msg, loc, ...} — sem tratar os dois formatos, o segundo caso vira
+// "[object Object]" na tela.
+function extrairMensagemErro(erro) {
+  const detail = erro && erro.detail;
+  if (typeof detail === 'string' && detail) return detail;
+  if (Array.isArray(detail) && detail.length) {
+    return detail.map((d) => d.msg || JSON.stringify(d)).join(' ');
+  }
+  return 'Não foi possível montar o simulado.';
+}
+
 async function iniciarSimulado() {
   els.erroInicial.hidden = true;
   const nome = els.nome.value.trim();
@@ -328,6 +356,16 @@ async function iniciarSimulado() {
     els.erroInicial.hidden = false;
     return;
   }
+
+  const quantidadeMin = Number(els.quantidade.min) || 1;
+  const quantidadeMax = Number(els.quantidade.max) || 100;
+  const quantidade = Number(els.quantidade.value);
+  if (!Number.isInteger(quantidade) || quantidade < quantidadeMin || quantidade > quantidadeMax) {
+    els.erroInicial.textContent = `Quantidade de questões deve ser um número inteiro entre ${quantidadeMin} e ${quantidadeMax}.`;
+    els.erroInicial.hidden = false;
+    return;
+  }
+
   localStorage.setItem('simulador_nome', nome);
   atualizarUsuarioAtual();
 
@@ -340,7 +378,7 @@ async function iniciarSimulado() {
   if (a) params.set('area', a);
   if (st) params.set('subtopic', st);
   if (d) params.set('difficulty', d);
-  params.set('n', els.quantidade.value || '10');
+  params.set('n', String(quantidade));
   params.set('exploracao', els.exploracao.value);
   params.set('nome', nome);
 
@@ -349,7 +387,7 @@ async function iniciarSimulado() {
     area: [...estado.selecionados.area],
     subtopic: [...estado.selecionados.subtopic],
     difficulty: [...estado.selecionados.difficulty],
-    n: Number(els.quantidade.value || 10),
+    n: quantidade,
     exploracao: Number(els.exploracao.value),
   };
 
@@ -359,10 +397,12 @@ async function iniciarSimulado() {
     const resp = await fetch(`/questoes?${params.toString()}`);
     if (!resp.ok) {
       const erro = await resp.json().catch(() => ({}));
-      throw new Error(erro.detail || 'Não foi possível montar o simulado.');
+      throw new Error(extrairMensagemErro(erro));
     }
     const dados = await resp.json();
     estado.questoes = dados.questoes;
+    estado.quantidadeSolicitada = quantidade;
+    estado.totalDisponivel = dados.total_disponivel;
     renderSimulado();
     mostrarTela('tela-simulado');
   } catch (e) {
@@ -379,7 +419,43 @@ function renderSimulado() {
   estado.tempoUltimaResposta = Date.now();
   estado.temposGastos = {};
   estado.questoes.forEach((q, i) => els.listaQuestoes.appendChild(renderQuestao(q, i)));
-  els.contadorSimulado.textContent = `${estado.questoes.length} questões`;
+
+  const total = estado.questoes.length;
+  if (estado.quantidadeSolicitada && total < estado.quantidadeSolicitada) {
+    els.contadorSimulado.textContent =
+      `${total} questões (você pediu ${estado.quantidadeSolicitada}, mas só havia ${total} disponível(is) para os filtros escolhidos)`;
+  } else {
+    els.contadorSimulado.textContent = `${total} questões`;
+  }
+
+  iniciarCronometro();
+}
+
+function formatarCronometro(segundosTotais) {
+  const h = Math.floor(segundosTotais / 3600);
+  const m = Math.floor((segundosTotais % 3600) / 60);
+  const s = Math.floor(segundosTotais % 60);
+  const doisDigitos = (n) => String(n).padStart(2, '0');
+  return h > 0 ? `${h}:${doisDigitos(m)}:${doisDigitos(s)}` : `${doisDigitos(m)}:${doisDigitos(s)}`;
+}
+
+function atualizarCronometro() {
+  const decorrido = (Date.now() - estado.cronometroInicio) / 1000;
+  els.cronometroSimulado.textContent = formatarCronometro(decorrido);
+}
+
+function iniciarCronometro() {
+  pararCronometro();
+  estado.cronometroInicio = Date.now();
+  atualizarCronometro();
+  estado.cronometroIntervalId = setInterval(atualizarCronometro, 1000);
+}
+
+function pararCronometro() {
+  if (estado.cronometroIntervalId) {
+    clearInterval(estado.cronometroIntervalId);
+    estado.cronometroIntervalId = null;
+  }
 }
 
 // Cronometra o tempo entre uma resposta marcada e a anterior (a tela de
@@ -407,6 +483,7 @@ function coletarRespostas() {
 }
 
 async function corrigirSimulado() {
+  pararCronometro();
   const nome = els.nome.value.trim();
   const respostas = coletarRespostas();
   const resp = await fetch('/tentativas', {
@@ -420,15 +497,15 @@ async function corrigirSimulado() {
     return;
   }
   const resultado = await resp.json();
-  renderResultado(resultado);
+  estado.veioDoHistorico = false;
+  els.btnVoltarHistorico.hidden = true;
+  renderResultado(resultado, new Map(estado.questoes.map((q) => [q.id, q])));
   mostrarTela('tela-resultado');
 }
 
-function renderResultado(resultado) {
+function renderResultado(resultado, questaoPorId) {
   els.resumoAcertos.textContent = `${resultado.total_acertos} de ${resultado.total_questoes} corretas`;
   els.listaResultado.innerHTML = '';
-
-  const questaoPorId = new Map(estado.questoes.map((q) => [q.id, q]));
 
   resultado.respostas.forEach((r, i) => {
     const q = questaoPorId.get(r.questao_id);
@@ -449,6 +526,15 @@ function renderResultado(resultado) {
       (q.files || []).forEach((url) => {
         if (!urlsRenderizadas.has(url)) cartao.appendChild(textoImagem(url));
       });
+    } else if (q) {
+      (q.files || []).forEach((url) => cartao.appendChild(textoImagem(url)));
+    }
+
+    if (q && q.alternatives_introduction) {
+      const intro = document.createElement('div');
+      intro.className = 'questao-intro';
+      renderizarConteudoComMarkdown(intro, q.alternatives_introduction);
+      cartao.appendChild(intro);
     }
 
     if (q) {
@@ -483,6 +569,95 @@ function renderResultado(resultado) {
 
     els.listaResultado.appendChild(cartao);
   });
+}
+
+function formatarFiltrosResumo(filtros) {
+  filtros = filtros || {};
+  const nomeCampo = { source: 'Fonte', area: 'Área', subtopic: 'Subtópico', difficulty: 'Dificuldade' };
+  const partes = ['source', 'area', 'subtopic', 'difficulty']
+    .filter((campo) => Array.isArray(filtros[campo]) && filtros[campo].length)
+    .map((campo) => `${nomeCampo[campo]}: ${filtros[campo].map((v) => rotulo(campo, v)).join(', ')}`);
+  return partes.length ? partes.join(' • ') : 'Todos os filtros';
+}
+
+async function verHistorico() {
+  els.erroInicial.hidden = true;
+  const nome = els.nome.value.trim();
+  if (!nome) {
+    els.erroInicial.textContent = 'Digite seu nome pra ver seus simulados anteriores.';
+    els.erroInicial.hidden = false;
+    return;
+  }
+  localStorage.setItem('simulador_nome', nome);
+  estado.historicoNomeAtual = nome;
+
+  const resp = await fetch(`/tentativas/${encodeURIComponent(nome)}`);
+  const tentativas = await resp.json();
+
+  els.historicoNome.textContent = nome;
+  els.historicoVazio.hidden = tentativas.length > 0;
+  els.btnResetarHistorico.hidden = tentativas.length === 0;
+  renderHistorico(tentativas);
+  mostrarTela('tela-historico');
+}
+
+async function resetarHistorico() {
+  const nome = estado.historicoNomeAtual;
+  if (!nome) return;
+  const confirmado = window.confirm(
+    `Tem certeza que quer apagar TODO o histórico de simulados de "${nome}"? Essa ação não pode ser desfeita.`
+  );
+  if (!confirmado) return;
+
+  const resp = await fetch(`/tentativas/${encodeURIComponent(nome)}`, { method: 'DELETE' });
+  if (!resp.ok) {
+    alert('Não foi possível resetar o histórico.');
+    return;
+  }
+  const resultado = await resp.json();
+  alert(`Histórico apagado: ${resultado.tentativas_removidas} simulado(s) removido(s).`);
+  verHistorico();
+}
+
+function renderHistorico(tentativas) {
+  els.historicoLista.innerHTML = '';
+  tentativas.forEach((t) => {
+    const cartao = document.createElement('article');
+    cartao.className = 'cartao historico-item';
+
+    const data = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+    const percentual = t.total_questoes ? Math.round((100 * t.total_acertos) / t.total_questoes) : 0;
+
+    const titulo = document.createElement('p');
+    titulo.className = 'historico-item-titulo';
+    titulo.textContent = `${data} — ${t.total_acertos} de ${t.total_questoes} corretas (${percentual}%)`;
+    cartao.appendChild(titulo);
+
+    const filtros = document.createElement('p');
+    filtros.className = 'dica';
+    filtros.textContent = formatarFiltrosResumo(t.filtros_usados);
+    cartao.appendChild(filtros);
+
+    const btnDetalhe = document.createElement('button');
+    btnDetalhe.className = 'botao-secundario';
+    btnDetalhe.textContent = 'Ver detalhes';
+    btnDetalhe.addEventListener('click', () => verDetalheTentativa(t));
+    cartao.appendChild(btnDetalhe);
+
+    els.historicoLista.appendChild(cartao);
+  });
+}
+
+async function verDetalheTentativa(tentativa) {
+  const ids = [...new Set(tentativa.respostas.map((r) => r.questao_id))];
+  const resp = await fetch(`/questoes/por-id?ids=${encodeURIComponent(ids.join(','))}`);
+  const questoes = await resp.json();
+  const questaoPorId = new Map(questoes.map((q) => [q.id, q]));
+
+  estado.veioDoHistorico = true;
+  els.btnVoltarHistorico.hidden = false;
+  renderResultado(tentativa, questaoPorId);
+  mostrarTela('tela-resultado');
 }
 
 function renderBarras(containerId, dados, tipo) {
@@ -628,6 +803,10 @@ els.btnRefazer.addEventListener('click', () => mostrarTela('tela-inicial'));
 els.btnVerDashboard.addEventListener('click', verDashboard);
 els.btnVerDashboardResultado.addEventListener('click', verDashboard);
 els.btnDashboardVoltar.addEventListener('click', () => mostrarTela('tela-inicial'));
+els.btnVerHistorico.addEventListener('click', verHistorico);
+els.btnHistoricoVoltar.addEventListener('click', () => mostrarTela('tela-inicial'));
+els.btnVoltarHistorico.addEventListener('click', () => mostrarTela('tela-historico'));
+els.btnResetarHistorico.addEventListener('click', resetarHistorico);
 
 carregarNome();
 carregarMeta();

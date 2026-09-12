@@ -217,6 +217,16 @@ def get_questoes(
     return {"total_disponivel": len(candidatos), "questoes": selecionadas}
 
 
+@app.get("/questoes/por-id")
+def get_questoes_por_id(ids: str):
+    """Busca questoes completas (contexto, alternativas, imagens) por id.
+    Usado pela tela de historico: /tentativas/{nome} so guarda o
+    resultado da resposta, nao o enunciado, entao a tela de detalhe
+    busca aqui os dados completos das questoes envolvidas."""
+    lista_ids = parse_list_param(ids) or []
+    return [BANCO_BY_ID[i] for i in lista_ids if i in BANCO_BY_ID]
+
+
 class RespostaIn(BaseModel):
     questao_id: str
     resposta_usuario: Optional[str] = None
@@ -313,6 +323,25 @@ def get_tentativas(nome: str):
                 }
             )
     return resultado
+
+
+@app.delete("/tentativas/{nome}")
+def resetar_historico(nome: str):
+    """Apaga todo o historico (tentativas + respostas) de um usuario.
+    Mesma logica de exclusao em cascata do `iniciar-simulador.bash
+    --reset`, exposta aqui como endpoint HTTP pra a UI poder oferecer
+    um botao de reset sem precisar de acesso ao terminal."""
+    with get_conn() as conn:
+        ids = [
+            r["id"]
+            for r in conn.execute(
+                "SELECT id FROM tentativas WHERE nome_usuario = ?", (nome,)
+            ).fetchall()
+        ]
+        conn.executemany("DELETE FROM respostas WHERE tentativa_id = ?", [(i,) for i in ids])
+        conn.execute("DELETE FROM tentativas WHERE nome_usuario = ?", (nome,))
+        conn.commit()
+    return {"tentativas_removidas": len(ids)}
 
 
 SEM_CLASSIFICACAO = "(sem classificação)"

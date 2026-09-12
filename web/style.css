@@ -126,7 +126,7 @@ input[type="range"] { width: 100%; }
   font-size: 0.9rem;
 }
 
-.botao-primario, .botao-secundario {
+.botao-primario, .botao-secundario, .botao-perigo {
   border: none;
   border-radius: 8px;
   padding: 12px 20px;
@@ -148,6 +148,12 @@ input[type="range"] { width: 100%; }
   border: 1px solid var(--cor-primaria);
 }
 
+.botao-perigo {
+  background: transparent;
+  color: var(--cor-errado);
+  border: 1px solid var(--cor-errado);
+}
+
 .barra-simulado {
   position: sticky;
   top: 0;
@@ -161,6 +167,12 @@ input[type="range"] { width: 100%; }
 
 .barra-simulado-rodape { position: static; justify-content: flex-end; }
 .barra-simulado .botao-primario { width: auto; }
+
+.cronometro {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+}
 
 .questao-cartao {
   background: var(--cor-cartao);
@@ -239,6 +251,9 @@ input[type="range"] { width: 100%; }
 
 .resumo-resultado { text-align: center; }
 .resumo-resultado h2 { margin-top: 0; }
+
+.historico-item-titulo { font-weight: 600; margin: 0 0 4px; }
+.historico-item .dica { margin-bottom: 10px; }
 
 .botoes-resultado {
   display: flex;

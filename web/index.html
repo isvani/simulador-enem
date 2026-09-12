@@ -63,6 +63,7 @@
 
       <button id="btn-iniciar" class="botao-primario">Começar simulado</button>
       <button id="btn-ver-dashboard" class="botao-secundario botao-bloco">Ver meu desempenho</button>
+      <button id="btn-ver-historico" class="botao-secundario botao-bloco">Ver simulados anteriores</button>
     </div>
   </section>
 
@@ -70,6 +71,7 @@
   <section id="tela-simulado" class="tela" hidden>
     <div class="barra-simulado">
       <span id="contador-simulado"></span>
+      <span id="cronometro-simulado" class="cronometro" title="Tempo desde o início deste simulado"></span>
       <button id="btn-corrigir" class="botao-primario">Corrigir</button>
     </div>
     <div id="lista-questoes"></div>
@@ -85,12 +87,24 @@
       <div class="botoes-resultado">
         <button id="btn-refazer" class="botao-secundario">Refazer com outros filtros</button>
         <button id="btn-ver-dashboard-resultado" class="botao-secundario">Ver meu desempenho</button>
+        <button id="btn-voltar-historico" class="botao-secundario" hidden>Voltar ao histórico</button>
       </div>
     </div>
     <div id="lista-resultado"></div>
   </section>
 
-  <!-- TELA 4: dashboard -->
+  <!-- TELA 4: historico -->
+  <section id="tela-historico" class="tela" hidden>
+    <div class="cartao">
+      <h2>Simulados anteriores de <span id="historico-nome"></span></h2>
+      <p id="historico-vazio" class="dica" hidden>Você ainda não fez nenhum simulado com esse nome.</p>
+      <div id="historico-lista"></div>
+      <button id="btn-resetar-historico" class="botao-perigo botao-bloco" hidden>Resetar meu histórico</button>
+    </div>
+    <button id="btn-historico-voltar" class="botao-secundario botao-bloco">Voltar</button>
+  </section>
+
+  <!-- TELA 5: dashboard -->
   <section id="tela-dashboard" class="tela" hidden>
     <div class="cartao">
       <h2>Desempenho de <span id="dashboard-nome"></span></h2>
