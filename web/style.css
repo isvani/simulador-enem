@@ -257,7 +257,16 @@ input[type="range"] { width: 100%; }
 
 .alternativa input { margin-top: 3px; }
 
-.alternativa-imagem { max-width: 220px; border-radius: 6px; }
+.alternativa-imagem { max-width: 220px; border-radius: 6px; vertical-align: middle; }
+
+/* Alternativa cujo arquivo é uma fórmula curta e larga (ex.: "R ≥ L/√2"):
+   fica do tamanho de uma linha de texto normal em vez de um bloco grande
+   desalinhado com o "A) " que vem antes dela. */
+.alternativa-imagem--formula {
+  height: 1.6em;
+  width: auto;
+  max-width: none;
+}
 
 .alternativa.correta { background: #e6f6ec; border: 1px solid var(--cor-certo); }
 .alternativa.incorreta-marcada { background: #fbe9e9; border: 1px solid var(--cor-errado); }

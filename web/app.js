@@ -162,6 +162,28 @@ function textoImagem(url) {
   return img;
 }
 
+// Alternativas cujo conteúdo é uma imagem variam muito: algumas são só
+// uma fórmula curta (ex.: "R ≥ L/√2"), bem baixa e larga, que devia
+// ficar do tamanho de uma linha de texto normal; outras são diagramas
+// de verdade (figuras geométricas, gráficos) que precisam de espaço.
+// Só dá pra distinguir os dois casos depois que a imagem carrega e a
+// gente sabe a proporção largura/altura real dela.
+const RAZAO_IMAGEM_FORMULA = 2;
+
+function imagemAlternativa(alt) {
+  const img = document.createElement('img');
+  img.src = alt.file;
+  img.className = 'alternativa-imagem';
+  img.alt = `Alternativa ${alt.letter}`;
+  img.loading = 'lazy';
+  img.addEventListener('load', () => {
+    if (img.naturalWidth / img.naturalHeight >= RAZAO_IMAGEM_FORMULA) {
+      img.classList.add('alternativa-imagem--formula');
+    }
+  });
+  return img;
+}
+
 // O banco de questoes (legado, via enem-api) traz o texto com Markdown
 // simples embutido: **negrito**, _itálico_ e imagens ![](url)
 // intercaladas com o texto. Sem isso virar HTML de verdade, aparece o
@@ -377,12 +399,7 @@ function renderQuestao(questao, indice) {
       textoSpan.innerHTML = formatarTextoInline(alt.text);
       conteudo.appendChild(textoSpan);
     } else if (alt.file) {
-      const img = document.createElement('img');
-      img.src = alt.file;
-      img.className = 'alternativa-imagem';
-      img.alt = `Alternativa ${alt.letter}`;
-      img.loading = 'lazy';
-      conteudo.appendChild(img);
+      conteudo.appendChild(imagemAlternativa(alt));
     }
     label.appendChild(conteudo);
     cartao.appendChild(label);
@@ -607,11 +624,7 @@ function renderResultado(resultado, questaoPorId) {
           textoSpan.innerHTML = formatarTextoInline(alt.text);
           conteudo.appendChild(textoSpan);
         } else if (alt.file) {
-          const img = document.createElement('img');
-          img.src = alt.file;
-          img.className = 'alternativa-imagem';
-          img.alt = `Alternativa ${alt.letter}`;
-          conteudo.appendChild(img);
+          conteudo.appendChild(imagemAlternativa(alt));
         }
         linha.appendChild(conteudo);
         cartao.appendChild(linha);
