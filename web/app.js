@@ -201,6 +201,57 @@ function formatarTextoInline(texto) {
 
 const IMG_MARKDOWN_BLOCO_RE = /^!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)$/;
 
+// Tabela em Markdown (formato GFM): todas as linhas do bloco começam e
+// terminam com "|". Usada pra "quadros" com dados numéricos (ex.: médias
+// mensais) que, sem isso, virariam uma única linha de texto corrida.
+const LINHA_SEPARADORA_TABELA_RE = /^:?-+:?$/;
+
+function celulasDaLinhaTabela(linha) {
+  return linha.slice(1, -1).split('|').map((c) => c.trim());
+}
+
+function ehTabelaMarkdown(bloco) {
+  const linhas = bloco.split('\n').map((l) => l.trim()).filter(Boolean);
+  return linhas.length >= 2 && linhas.every((l) => l.startsWith('|') && l.endsWith('|'));
+}
+
+function renderizarTabelaMarkdown(bloco) {
+  const linhas = bloco.split('\n').map((l) => l.trim()).filter(Boolean);
+  const tabela = document.createElement('table');
+  tabela.className = 'questao-tabela';
+
+  const celulasSegundaLinha = linhas.length > 1 ? celulasDaLinhaTabela(linhas[1]) : [];
+  const temCabecalho = celulasSegundaLinha.length > 0
+    && celulasSegundaLinha.every((c) => LINHA_SEPARADORA_TABELA_RE.test(c));
+
+  let linhasCorpo = linhas;
+  if (temCabecalho) {
+    const thead = document.createElement('thead');
+    const tr = document.createElement('tr');
+    celulasDaLinhaTabela(linhas[0]).forEach((c) => {
+      const th = document.createElement('th');
+      th.innerHTML = formatarTextoInline(c);
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    tabela.appendChild(thead);
+    linhasCorpo = linhas.slice(2);
+  }
+
+  const tbody = document.createElement('tbody');
+  linhasCorpo.forEach((linha) => {
+    const tr = document.createElement('tr');
+    celulasDaLinhaTabela(linha).forEach((c) => {
+      const td = document.createElement('td');
+      td.innerHTML = formatarTextoInline(c);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  tabela.appendChild(tbody);
+  return tabela;
+}
+
 // Renderiza um texto que pode conter blocos de puro texto e imagens
 // Markdown misturados, no container dado. Preenche urlsRenderizadas
 // (um Set, opcional) com as URLs de imagem já colocadas na tela, pra
@@ -228,6 +279,11 @@ function renderizarConteudoComMarkdown(container, texto, urlsRenderizadas) {
     if (somenteImagem) {
       container.appendChild(textoImagem(somenteImagem[1]));
       if (urlsRenderizadas) urlsRenderizadas.add(somenteImagem[1]);
+      return;
+    }
+
+    if (ehTabelaMarkdown(bloco)) {
+      container.appendChild(renderizarTabelaMarkdown(bloco));
       return;
     }
 

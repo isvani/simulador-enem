@@ -209,6 +209,21 @@ input[type="range"] { width: 100%; }
 }
 .questao-paragrafo:last-child { margin-bottom: 0; }
 
+.questao-tabela {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+.questao-tabela th, .questao-tabela td {
+  border: 1px solid var(--cor-borda);
+  padding: 6px 10px;
+  text-align: center;
+}
+.questao-tabela th {
+  background: #eef1f6;
+}
+
 .questao-imagem {
   max-width: 100%;
   display: block;

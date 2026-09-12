@@ -133797,7 +133797,7 @@
     "subtopic": "Estatística e Probabilidade",
     "difficulty": "facil",
     "language": null,
-    "context": "A umidade relativa do ar é um dos indicadores utilizados na meteorologia para fazer previsões sobre o clima. O quadro apresenta as médias mensais, em porcentagem, da umidade relativa do ar em um período de seis meses consecutivos em uma cidade. Meses Maio Jun. Jul. Ago. Set. Out. Média mensal da umidade relativa do ar (%) 66 64 54 46 60 64 Nessa cidade, a mediana desses dados, em porcentagem, da umidade relativa do ar no período considerado foi",
+    "context": "A umidade relativa do ar é um dos indicadores utilizados na meteorologia para fazer previsões sobre o clima. O quadro apresenta as médias mensais, em porcentagem, da umidade relativa do ar em um período de seis meses consecutivos em uma cidade.\n\n| Meses | Maio | Jun. | Jul. | Ago. | Set. | Out. |\n| --- | --- | --- | --- | --- | --- | --- |\n| Média mensal da umidade relativa do ar (%) | 66 | 64 | 54 | 46 | 60 | 64 |\n\nNessa cidade, a mediana desses dados, em porcentagem, da umidade relativa do ar no período considerado foi",
     "alternatives_introduction": "",
     "alternatives": [
       {
