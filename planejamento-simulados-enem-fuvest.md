@@ -980,6 +980,48 @@ fontes estarem prontas.
       escrever o parser específico, popular a base, classificar
       subtópico/dificuldade, validar que o motor de simulados já
       consegue misturar ENEM + FUVEST
+      - **Progresso (2026-09-18): os 4 passos acima, feitos pra FUVEST
+        2024 Prova V (90 questões).** Download direto de
+        `fuvest.br/wp-content/uploads/` funciona sem bloqueio (mais
+        simples que o INEP). Parser (`scripts/extract_fuvest.py`) lida
+        com layout de 2 colunas, numeração solta (sem "QUESTÃO N" como
+        no ENEM — só um número de 2 dígitos, então a fronteira de
+        questão só é aceita em sequência estrita 1..90, pra não
+        confundir com números soltos dentro de tabelas do próprio
+        enunciado) e texto-base compartilhado entre questões (cabeçalho
+        "TEXTO PARA A(S) QUESTÃO(ÕES) ..." nomeia os índices atendidos,
+        evitando de largada o bug que o ENEM só descobriu depois — texto
+        compartilhado grudando na questão anterior).
+      - **Achado novo nesta fonte**: a fonte usada no PDF tem CMap
+        quebrado especificamente pra alguns glifos de expoente/índice
+        matemático (mapeiam pra pontos de código de escritas indianas ou
+        pra Área de Uso Privado) — sinalizados automaticamente
+        (`SUSPICIOUS_RANGES` em `extract_fuvest.py`) e resolvidos por
+        revisão visual (rasterização da região da questão + releitura),
+        não por heurística de texto. Das 90 questões, 11 precisaram
+        dessa revisão manual (7 por fórmula corrompida, 4 por
+        alternativa que é só imagem — 2 delas com os dois problemas);
+        3 questões tiveram figura essencial extraída e embutida no
+        contexto (não só as garatujas ilustrativas, puladas de
+        propósito). Script auxiliar: `scripts/_locate_and_render_fuvest.py`.
+      - **Classificação**: diferente do ENEM, a FUVEST não marca a
+        disciplina por questão no PDF (ordem embaralhada, sem cabeçalho
+        de matéria) — então a macroárea também foi inferida por leitura
+        de conteúdo, não só subtopic/difficulty. Reaproveitada a mesma
+        taxonomia de subtópicos já usada no ENEM (nenhum subtópico novo
+        precisou ser criado).
+      - **Motor de simulados**: `/questoes?source=fuvest` e a mistura
+        ENEM+FUVEST testadas via `curl` depois do `--start` — sem
+        mudança necessária no motor, só um bug real encontrado e
+        corrigido em `api/main.py`: `/meta` quebrava (500) ao tentar
+        ordenar áreas misturando `str` (ENEM) com `None` (FUVEST antes
+        de classificada) — mesmo tratamento que `subtopics_by_area` e o
+        dashboard já davam pra esse caso, só faltava em `areas`.
+      - **Pendente pra fechar a Fase 5 de fato**: isso cobriu só 1
+        ano/versão de prova (2024, Prova V) — a decisão de escopo da
+        seção 7.1 é "todos os anos disponíveis". Repetir o pipeline
+        (baixar → extrair → classificar) pros demais anos/versões da
+        FUVEST fica pra uma próxima sessão.
 - [ ] **Fase 6 — Adicionar ITA/UNICAMP** — Mesmo processo da Fase 5 para
       as duas bancas. UNICAMP: só a 1ª fase. ITA: atenção especial à
       notação matemática pesada (pode exigir mais rasterização de
