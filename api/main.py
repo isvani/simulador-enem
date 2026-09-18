@@ -157,7 +157,7 @@ def sample_weighted(candidatos: list[dict], pesos: list[float], n: int) -> list[
 @app.get("/meta")
 def get_meta():
     sources = sorted({q["source"] for q in BANCO})
-    areas = sorted({q["area"] for q in BANCO})
+    areas = sorted({q["area"] for q in BANCO if q["area"]})
     subtopics_by_area = {
         area: sorted({q["subtopic"] for q in BANCO if q["area"] == area and q["subtopic"]})
         for area in areas
