@@ -1017,11 +1017,38 @@ fontes estarem prontas.
         ordenar áreas misturando `str` (ENEM) com `None` (FUVEST antes
         de classificada) — mesmo tratamento que `subtopics_by_area` e o
         dashboard já davam pra esse caso, só faltava em `areas`.
-      - **Pendente pra fechar a Fase 5 de fato**: isso cobriu só 1
-        ano/versão de prova (2024, Prova V) — a decisão de escopo da
-        seção 7.1 é "todos os anos disponíveis". Repetir o pipeline
-        (baixar → extrair → classificar) pros demais anos/versões da
-        FUVEST fica pra uma próxima sessão.
+      - **Extensão (2025-09-18, mesmo dia): mais 3 anos (2025, 2023,
+        2022) — 360 questões FUVEST no total agora.** `extract_fuvest.py`
+        generalizado pra uma lista `CONFIGS` (um item por ano) em vez de
+        constantes fixas, porque o layout muda de ano pra ano: nome do
+        arquivo sem padrão único, footer de página numa linha só ou
+        quebrado em duas com hífen/travessão/menos diferentes, número da
+        questão solto ou entre chaves "{01}" (2025), e a ordem das
+        provas (V/K/Q/X/Z, ou V1-V4 em 2025) agora é lida do próprio
+        cabeçalho da tabela "GABARITO DE CORRESPONDÊNCIA" em vez de
+        fixada de antemão. Mesma revisão visual das pendências (39
+        questões dessa vez) e mesma classificação de área/subtópico/
+        dificuldade por leitura direta (270 questões). Scripts de apoio
+        generalizados pra varios anos de uma vez:
+        `_apply_fuvest_corrections_multi.py`,
+        `_apply_fuvest_classificacao_multi.py`.
+      - **Mapeamento do acervo completo**: `fuvest.br/acervo-vestibular/`
+        tem 50 edições (1977-2026), cada uma em
+        `fuvest.br/acervo-vestibular-{ano}/` com os links de PDF
+        específicos daquele ano (não dá pra adivinhar a URL por fórmula).
+        **Achado importante**: 1997 pra trás é só imagem escaneada — o
+        texto extraído é lixo de OCR, ou (em 1994/1996) só o gabarito
+        vem como camada de texto sobreposta à prova escaneada, sem
+        nenhum texto de verdade das questões. **1998 é o primeiro ano
+        com PDF nativo digital** (confirmado: 0 imagens embutidas, texto
+        limpo). Isso define o intervalo processável sem OCR: 1998-2025.
+      - **Pendente pra fechar a Fase 5 de fato**: com 2022/2023/2024/2025
+        prontos, faltam os anos de 1998 a 2021 (24 anos) pra cobrir todo
+        o intervalo digital nativo — o usuário pediu pra fazer em lotes
+        pequenos, do mais recente pro mais antigo, com checkpoint a cada
+        lote. 1997 pra trás fica fora do escopo automatizável (exigiria
+        OCR de verdade, projeto à parte). Continuar isso fica pra uma
+        próxima sessão.
 - [ ] **Fase 6 — Adicionar ITA/UNICAMP** — Mesmo processo da Fase 5 para
       as duas bancas. UNICAMP: só a 1ª fase. ITA: atenção especial à
       notação matemática pesada (pode exigir mais rasterização de
