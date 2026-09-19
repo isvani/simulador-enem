@@ -1042,13 +1042,51 @@ fontes estarem prontas.
         nenhum texto de verdade das questões. **1998 é o primeiro ano
         com PDF nativo digital** (confirmado: 0 imagens embutidas, texto
         limpo). Isso define o intervalo processável sem OCR: 1998-2025.
-      - **Pendente pra fechar a Fase 5 de fato**: com 2022/2023/2024/2025
-        prontos, faltam os anos de 1998 a 2021 (24 anos) pra cobrir todo
-        o intervalo digital nativo — o usuário pediu pra fazer em lotes
-        pequenos, do mais recente pro mais antigo, com checkpoint a cada
-        lote. 1997 pra trás fica fora do escopo automatizável (exigiria
-        OCR de verdade, projeto à parte). Continuar isso fica pra uma
-        próxima sessão.
+      - **Extensão (2026-09-19): mais 2 anos (2020, 2019) — 540 questões
+        FUVEST no total agora.** Mesmo padrão de lote pequeno (mais
+        recente pro mais antigo, com checkpoint). 2020 exigiu revisão
+        visual de 16 questões, 2019 de 19 (35 no total) — mesma mecânica
+        de sempre, mas com uma variação de layout de gabarito nova:
+        anos 2019-2021 usam um formato de "pares" (número da questão +
+        letra da resposta, ciclando pelas provas V/K/Q/X/Z, às vezes
+        unidos por hífen "1‐C") em vez da tabela "GABARITO DE
+        CORRESPONDÊNCIA" usada em 2022+. `parse_gabarito()` agora detecta
+        o formato pela presença da palavra "CORRESPOND" no texto do PDF
+        e despacha pra `_parse_gabarito_correspondencia()` ou
+        `_parse_gabarito_pairs()`.
+      - **2021 ficou de fora**: o único PDF arquivado da prova de 2021
+        ("Caderno Reserva") é nativo digital (fontes embutidas, renderiza
+        perfeitamente) mas sua camada de texto está essencialmente vazia
+        pro corpo das questões — só cabeçalho/rodapé/artefatos de
+        gabarito são extraíveis, confirmado visualmente comparando o
+        render da página com o `get_text()`. Ficou documentado no código
+        (`extract_fuvest.py`) e pulado — exigiria OCR de verdade pras 90
+        questões, fora do escopo deste parser.
+      - **Bug sério encontrado e corrigido no detector de corrupção**: o
+        detector original (`SUSPICIOUS_RANGES`, uma lista de blocos
+        Unicode "suspeitos") só cobria os blocos vistos em 2022-2025
+        (Devanagari-Malayalam, Latin Ext-D, Área de Uso Privado) e
+        deixava passar corrupção real de 2019/2020, que usa OUTROS
+        blocos quebrados (Síriaco, Etíope). Trocado por uma abordagem de
+        allowlist (`ALLOWED_RANGES` + `has_suspicious_glyphs()`): qualquer
+        caractere não-ASCII que não esteja numa lista de blocos
+        legítimos (latim/acentos, grego, sub/sobrescritos, símbolos
+        matemáticos etc.) é sinalizado. Rodar essa allowlist retroativamente
+        nos anos já prontos (2022-2025) achou e corrigiu 3 bugs de
+        transcrição manual anteriores que tinham passado despercebidos:
+        `fuvest-2024-63`, `fuvest-2023-85` e `fuvest-2020-71` tinham texto
+        de rodapé ("Note e adote...") vazado e corrompido dentro da
+        alternativa E; `fuvest-2025-18` tinha as 5 alternativas inteiras
+        ainda com glifos quebrados (só o contexto tinha sido corrigido
+        antes). Scan final: zero glifos suspeitos remanescentes nas 540
+        questões FUVEST.
+      - **Pendente pra fechar a Fase 5 de fato**: com 2019-2025 prontos
+        (exceto 2021, fora do escopo), faltam os anos de 1998 a 2018
+        (21 anos) pra cobrir todo o intervalo digital nativo — mesmo
+        padrão de lotes pequenos, do mais recente pro mais antigo, com
+        checkpoint a cada lote. 1997 pra trás fica fora do escopo
+        automatizável (exigiria OCR de verdade, projeto à parte).
+        Continuar isso fica pra uma próxima sessão.
 - [ ] **Fase 6 — Adicionar ITA/UNICAMP** — Mesmo processo da Fase 5 para
       as duas bancas. UNICAMP: só a 1ª fase. ITA: atenção especial à
       notação matemática pesada (pode exigir mais rasterização de

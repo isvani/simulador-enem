@@ -80,10 +80,20 @@ TOTAL_QUESTOES = 90
 # chaves "{01}", travessao/hifen/menos diferentes) - por isso cada ano
 # tem sua propria entrada aqui em vez de um padrao de URL/nome unico.
 CONFIGS = [
-    {"year": 2025, "prova_letra": "V1", "prova_file": "fuvest2025_primeira_fase_prova_V1.pdf", "gabarito_file": "fuvest2025_gabarito_primeira_fase.pdf"},
-    {"year": 2023, "prova_letra": "V", "prova_file": "fuvest2023_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2023_gabarito_primeira_fase.pdf"},
-    {"year": 2022, "prova_letra": "V", "prova_file": "fuvest2022_primeira_fase_tipo_V.pdf", "gabarito_file": "fuvest2022_gabarito_primeira_fase.pdf"},
+    {"year": 2020, "prova_letra": "V", "prova_file": "fuvest2020_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2020_gabarito_primeira_fase.pdf"},
+    {"year": 2019, "prova_letra": "V", "prova_file": "fuvest2019_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2019_gabarito_primeira_fase.pdf"},
 ]
+
+# Anos ja processados em rodadas anteriores desta fase (mantidos aqui so
+# de referencia - reprocessar exigiria rebaixar area/subtopic/difficulty
+# que ja foram classificados por fora):
+#   {"year": 2025, "prova_letra": "V1", "prova_file": "fuvest2025_primeira_fase_prova_V1.pdf", "gabarito_file": "fuvest2025_gabarito_primeira_fase.pdf"},
+#   {"year": 2023, "prova_letra": "V", "prova_file": "fuvest2023_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2023_gabarito_primeira_fase.pdf"},
+#   {"year": 2022, "prova_letra": "V", "prova_file": "fuvest2022_primeira_fase_tipo_V.pdf", "gabarito_file": "fuvest2022_gabarito_primeira_fase.pdf"},
+# 2021: PDF unico disponivel no acervo ("Caderno Reserva") tem uma fonte
+# com CMap tao quebrado que o texto das questoes extrai vazio (so
+# cabecalhos/numeros saem certo, mesmo a pagina renderizando bem
+# visualmente) - fora do escopo deste parser por ora.
 
 QUESTION_NUM_RE = re.compile(r"^\{?(\d{2})\}?$")
 ALT_RE = re.compile(r"^\(([A-E])\)\s*(.*)$")
@@ -98,16 +108,37 @@ RASCUNHO_RE = re.compile(r"^RASCUNHO$")
 # nenhum uso legitimo em uma prova em portugues. Simbolos matematicos de
 # verdade (grego, setas, operadores, italico matematico Unicode como
 # "𝑓(𝑥)") ficam fora dessas faixas e nao sao sinalizados.
-SUSPICIOUS_RANGES = [
-    (0x0900, 0x0DFF),  # Devanagari ... Malayalam (blocos de escritas indianas)
-    (0xA700, 0xA7FF),  # Latin Extended-D (viu-se glifo isolado nessa faixa)
-    (0xE000, 0xF8FF),  # Area de Uso Privado
+# Lista de permissao (em vez de bloqueio): cada ano da FUVEST usa uma
+# fonte matematica diferente, e cada uma mapeia os glifos quebrados
+# (expoente/indice/variavel italica) pra uma faixa Unicode "de sobra"
+# diferente - ja vimos cair em blocos indianos (Oriya/Malayalam), Latin
+# Extended-D, Area de Uso Privado, siriaco e etiope, sem padrao entre os
+# anos. Em vez de ir catalogando faixa por faixa reativamente, listamos
+# aqui as faixas que TEM uso legitimo numa prova em portugues/matematica
+# e sinalizamos qualquer coisa fora delas.
+ALLOWED_RANGES = [
+    (0x0000, 0x024F),  # ASCII + Latin-1 Supplement + Latin Extended A/B (acentos)
+    (0x0250, 0x02FF),  # extensoes IPA + letras modificadoras de espacamento (sobrescritos: ˣ)
+    (0x0370, 0x03FF),  # grego (variaveis, unidades)
+    (0x1D00, 0x1DBF),  # extensoes foneticas (subscritos: ᵢ ⱼ usados em transcricao manual)
+    (0x2000, 0x206F),  # pontuacao geral (aspas curvas, travessao, reticencias, bullet)
+    (0x2070, 0x209F),  # sobrescritos e subscritos
+    (0x20A0, 0x20CF),  # simbolos de moeda
+    (0x2100, 0x214F),  # simbolos tipo-letra (Ω, ℝ, ℓ...)
+    (0x2150, 0x218F),  # formas numerais
+    (0x2190, 0x21FF),  # setas
+    (0x2200, 0x22FF),  # operadores matematicos
+    (0x2300, 0x23FF),  # diversos tecnicos
+    (0x25A0, 0x25FF),  # formas geometricas (marcadores)
+    (0x2C60, 0x2C7F),  # latin extended-C (subscrito: ⱼ usado em transcricao manual)
+    (0x1D400, 0x1D7FF),  # simbolos alfanumericos matematicos (itálico Unicode)
 ]
 
 
 def has_suspicious_glyphs(text: str) -> bool:
     return any(
-        any(start <= ord(ch) <= end for start, end in SUSPICIOUS_RANGES) for ch in text
+        ord(ch) > 0x7F and not any(start <= ord(ch) <= end for start, end in ALLOWED_RANGES)
+        for ch in text
     )
 
 
@@ -217,20 +248,14 @@ def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
     return questions, missing
 
 
-def parse_gabarito(pdf_path: Path, prova_letra: str) -> dict[int, str]:
-    import fitz
-
-    doc = fitz.open(pdf_path)
-    full = "\n".join(page.get_text() for page in doc)
+def _parse_gabarito_correspondencia(full: str, prova_letra: str) -> dict[int, str]:
+    """Formato usado em 2022-2025: tabela "GABARITO DE CORRESPONDENCIA",
+    uma linha por questao canonica no formato [resposta, num_V, num_K,
+    num_Q, num_X, num_Z, ...]."""
     tokens = [t.strip() for t in full.split("\n") if t.strip()]
-
-    # A ordem das provas (V/K/Q/X/Z, ou V1/V2/V3/V4 em 2025...) e lida do
-    # proprio cabecalho da tabela "GABARITO DE CORRESPONDENCIA", em vez
-    # de fixada de antemao - evita depender de uma lista hardcoded que
-    # pode nao bater com o ano em questao.
-    header_m = re.search(r"RESPOSTA((?:\s+PROVA\s+\S+)+)", full)
-    prova_order = re.findall(r"PROVA\s+(\S+)", header_m.group(1))
-    col_index = prova_order.index(prova_letra)
+    header_m = re.search(r"RESPOSTA((?:\s+PROVA\s+\S+)+)", full, re.IGNORECASE)
+    prova_order = [p.upper() for p in re.findall(r"PROVA\s+(\S+)", header_m.group(1), re.IGNORECASE)]
+    col_index = prova_order.index(prova_letra.upper())
 
     start = next(i for i, t in enumerate(tokens) if "CORRESPOND" in t.upper())
 
@@ -248,6 +273,53 @@ def parse_gabarito(pdf_path: Path, prova_letra: str) -> dict[int, str]:
                 continue
         i += 1
     return gabarito
+
+
+PAIR_RE = re.compile(r"(\d{1,3})\s*[-‐]?\s*\n?\s*([A-E])(?![A-Za-z])")
+
+
+def _parse_gabarito_pairs(full: str, prova_letra: str) -> dict[int, str]:
+    """Formato usado em 2019-2021: sem tabela de correspondencia: um
+    cabecalho "GABARITO" seguido dos rotulos "PROVA V"/"PROVA K"/... (ou
+    "Prova V"/...) e depois pares (numero, resposta) - juntos com hifen
+    ("1-C") ou em linhas separadas ("1" / "D") - que se repetem
+    ciclicamente pra cada prova, dois pares por vez (questao N e N+45)."""
+    gabarito_idx = full.upper().find("GABARITO")
+    header_region = full[gabarito_idx:] if gabarito_idx >= 0 else full
+    prova_order = [
+        p.upper() for p in re.findall(r"PROVA\s+([A-Z0-9]{1,2})\b", header_region, re.IGNORECASE)
+    ][:5]
+    n_cols = len(prova_order)
+    col_index = prova_order.index(prova_letra.upper())
+
+    # posiciona o inicio dos dados logo apos o ULTIMO rotulo "PROVA X" do cabecalho
+    last_label = None
+    for m in re.finditer(r"PROVA\s+[A-Z0-9]{1,2}\b", header_region, re.IGNORECASE):
+        last_label = m
+    data_region = header_region[last_label.end():] if last_label else header_region
+
+    pairs = [(int(n), a) for n, a in PAIR_RE.findall(data_region)]
+
+    gabarito: dict[int, str] = {}
+    for cycle_start in range(0, len(pairs) - 1, 2 * n_cols):
+        offset = cycle_start + col_index * 2
+        if offset + 1 < len(pairs):
+            q1, a1 = pairs[offset]
+            q2, a2 = pairs[offset + 1]
+            gabarito[q1] = a1
+            gabarito[q2] = a2
+    return gabarito
+
+
+def parse_gabarito(pdf_path: Path, prova_letra: str) -> dict[int, str]:
+    import fitz
+
+    doc = fitz.open(pdf_path)
+    full = "\n".join(page.get_text() for page in doc)
+
+    if "CORRESPOND" in full.upper():
+        return _parse_gabarito_correspondencia(full, prova_letra)
+    return _parse_gabarito_pairs(full, prova_letra)
 
 
 def build_questions(year: int, parsed: dict[int, dict], gabarito: dict[int, str]) -> tuple[list[dict], list[dict]]:

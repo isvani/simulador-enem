@@ -14,9 +14,8 @@ BANCO = ROOT / "dados" / "banco_questoes.json"
 CACHE = ROOT / "scripts" / "_pdf_cache"
 
 FILES = [
-    "fuvest2025_classificacao.json",
-    "fuvest2023_classificacao.json",
-    "fuvest2022_classificacao.json",
+    "fuvest2020_classificacao.json",
+    "fuvest2019_classificacao.json",
 ]
 
 
@@ -35,7 +34,7 @@ def main() -> None:
             q["difficulty"] = c["difficulty"]
             aplicadas += 1
 
-    target_ids = {q["id"] for q in banco if q["source"] == "fuvest" and q["year"] in (2025, 2023, 2022)}
+    target_ids = {q["id"] for q in banco if q["source"] == "fuvest" and q["year"] in (2020, 2019)}
     faltando = target_ids - classificacao.keys()
 
     BANCO.write_text(json.dumps(banco, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -44,7 +43,7 @@ def main() -> None:
     if faltando:
         print(f"Questoes sem classificacao: {sorted(faltando)}")
     else:
-        print("Todas as questoes de 2025/2023/2022 foram classificadas.")
+        print("Todas as questoes de 2020/2019 foram classificadas.")
 
 
 if __name__ == "__main__":

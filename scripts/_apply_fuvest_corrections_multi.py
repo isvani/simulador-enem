@@ -17,9 +17,8 @@ PENDING = ROOT / "dados" / "questoes_pendentes_revisao_fuvest.json"
 CACHE = ROOT / "scripts" / "_pdf_cache"
 
 YEAR_FILES = {
-    2025: ("fuvest2025_corrections.json", "fuvest2025_pending_images.json"),
-    2023: ("fuvest2023_corrections.json", "fuvest2023_pending_images.json"),
-    2022: ("fuvest2022_corrections.json", "fuvest2022_pending_images.json"),
+    2020: ("fuvest2020_corrections.json", "fuvest2020_pending_images.json"),
+    2019: ("fuvest2019_corrections.json", "fuvest2019_pending_images.json"),
 }
 
 
