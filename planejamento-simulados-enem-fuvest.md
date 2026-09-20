@@ -474,6 +474,26 @@ fontes estarem prontas.
         deveriam seguir a mesma convenção quando forem completadas
         (recortar a alternativa da página rasterizada, salvar em
         `dados/imagens/` local, preencher `file` com o caminho).
+      - **Atualização (2026-09-20): as 12 questões pendentes foram
+        completadas e movidas para o banco principal.** A ressalva acima
+        sobre a interface não estava mais atual — o suporte a imagem por
+        alternativa (`alt.file` → `<img>`) já tinha sido implementado em
+        algum momento da Fase 5 (mesma convenção usada em
+        `fuvest2025_pending_images.json`), então só faltava mesmo anexar
+        as imagens. Descoberta ao inspecionar os PDFs
+        (`scripts/_inspect_images.py`, removido depois de usado): 11 das
+        12 questões têm cada alternativa como uma imagem raster (JPEG/PNG/
+        JPX) já embutida no PDF como XObject próprio — extraída direto via
+        `doc.extract_image(xref)`, sem re-rasterizar (e sem perda de
+        qualidade); só a questão enem-2024-112 (heredograma) tem
+        alternativas desenhadas em vetor (linhas/círculos/quadrados), essa
+        foi recortada da página renderizada
+        (`page.get_pixmap(clip=..., dpi=300)`). As 5 imagens da questão
+        enem-2024-121 vieram em JPEG2000 (`jpx`), formato que navegador
+        nenhum decodifica nativamente — reconvertidas pra PNG via
+        `fitz.Pixmap`. Script usado
+        (mantido pra referência): `scripts/_complete_pending_images_enem.py`.
+        `dados/questoes_pendentes_imagem.json` ficou vazio (`[]`).
 - [x] **Fase 3 — Classificação v1** — CONCLUÍDA (2026-09-12, iniciada em
       2026-09-11). Classificar por subtópico e dificuldade, **todas as 4
       áreas**. Decisão de execução tomada nesta sessão: rodar **uma área

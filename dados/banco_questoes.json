@@ -178878,5 +178878,545 @@
     ],
     "correct_alternative": "B",
     "files": []
+  },
+  {
+    "id": "enem-2024-121",
+    "source": "enem",
+    "year": 2024,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Na tirinha, Calvin se divertia em um balanço antes de soltar-se dele e cair ao chão. Em sua fala, ele demonstra ter imaginado que permaneceria em movimento circular. Porém, a força gravitacional, que permanece atuando no garoto, modifica a direção de sua velocidade, fazendo com que ele chegue ao chão da maneira ilustrada no último quadrinho. WATTERSON, B. Disponível em: https://tiras-do-calvin.tumblr.com. Acesso em: 19 nov. 2021 (adaptado). Qual vetor representa a força resultante exercida pelo chão sobre Calvin no exato momento em que ele toca o chão?",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/3d224488-c02c-43b7-a6da-aa51ae24364b.png",
+        "is_correct": true
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/05dfba1e-9de8-4430-b70e-610c690a07aa.png",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/213842bb-0a8f-44f0-acdf-3af783fd5dd4.png",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/77ec4e1b-9fb7-4492-9305-fe27b22614c9.png",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/2280daf6-247b-4d0e-b5ba-8e5b6b22b1a7.png",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "A",
+    "files": []
+  },
+  {
+    "id": "enem-2024-127",
+    "source": "enem",
+    "year": 2024,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Em um experimento de laboratório, duas barras metálicas, A e B, são carregadas com cargas opostas e imersas em óleo. Farelo de milho é jogado sobre o óleo e, após um certo tempo, o farelo assume o formato das linhas de campo elétrico entre as barras. A figura representa a vista superior desse experimento. ALMEIDA, M. A. T. Introdução às ciências físicas 2 — volume 4: módulo 4. Rio de Janeiro: Fundação CECIERJ, 2007 (adaptado). Ao repetir o experimento colocando um cilindro metálico oco entre as placas, o esquema que representa o formato das linhas de campo assumido pelo farelo é:",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/2f5bb5c5-58b5-49d4-9843-2d9e92761b2a.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/30b0262a-c798-47b0-8c91-2eb5a5ceab49.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/fa85c865-2c45-4a69-a665-36e5840b775f.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/74aff71d-2002-43fb-9d01-e9e405748c82.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/99cba60e-c7b0-4830-bde4-40624eb429ed.jpeg",
+        "is_correct": true
+      }
+    ],
+    "correct_alternative": "E",
+    "files": []
+  },
+  {
+    "id": "enem-2024-131",
+    "source": "enem",
+    "year": 2024,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "O LED é um dispositivo eletrônico que conduz corrente elétrica em um único sentido, sendo caracterizado por uma tensão e uma corrente máxima de funcionamento, Imáx. Um LED acende apenas se a corrente que o percorre está no sentido permitido e se a diferença de potencial à qual está submetido é igual ou superior à sua tensão de funcionamento. A figura ilustra o símbolo do LED usado na representação de circuitos. Um estudante de física analisa as propriedades do LED em um circuito simples de corrente contínua. Ele dispõe dos seguintes materiais: uma bateria ideal de 4,5 V; dois LEDs de tensão 3,0 V e Imáx = 1,0 mA cada; e dois resistores de 1,5 kΩ cada. O circuito que o estudante pode montar, para que ambos os LEDs fiquem acesos e cada um seja percorrido por Imáx, é",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/9a2dfa66-b759-4392-8bc4-5d568f1fb0e9.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/1c23188d-bed9-4870-8b0d-0126a8ff4407.jpeg",
+        "is_correct": true
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/4c021a32-812c-4d5e-b145-7f4393180049.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/3998b68f-2079-446c-93e1-fc9bd772dd2f.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/d222edf6-d4af-4233-b78f-89ac542ee568.jpeg",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "B",
+    "files": []
+  },
+  {
+    "id": "enem-2024-161",
+    "source": "enem",
+    "year": 2024,
+    "area": "matematica",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Um tanque, em formato de paralelepípedo reto retângulo, tem em seu interior dois anteparos verticais, fixados na sua base e em duas paredes opostas, sendo perpendiculares a elas, conforme a figura. Esses anteparos, de espessuras desprezíveis, estão instalados de maneira a dividir a base do tanque em três retângulos congruentes, tendo suas alturas iguais à metade e a um quarto da altura do tanque. O tanque é abastecido por uma entrada situada no teto, através de um duto que despeja água a uma vazão constante, sendo necessárias 12 horas para finalizar o seu enchimento. O gráfico que descreve, em cada instante, a maior altura de coluna de água, dentre aquelas que vão sendo formadas ao longo do enchimento do tanque, é",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/e08f1bed-51ce-4421-ac45-595ee277fdba.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/27e57993-bb8d-4b9e-8f60-294d34408253.jpeg",
+        "is_correct": true
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/61a585d9-0dcc-42e1-9d5a-f9dccc33097a.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/da0b2d3e-d128-4d77-a5ac-5cbae635d6c6.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/444cb236-5b22-486e-8bc4-e0ae06bdf097.jpeg",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "B",
+    "files": []
+  },
+  {
+    "id": "enem-2024-168",
+    "source": "enem",
+    "year": 2024,
+    "area": "matematica",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Projetistas de uma fábrica de amortecedores realizaram uma série de experimentos que produziram oscilações semelhantes ao comportamento do gráfico de uma senoide, para qualquer tipo de estrada. Cada experimento teve duração de 20 minutos, sendo os 9 primeiros minutos em superfície que simula uma rodovia asfaltada, e os 11 minutos restantes em superfície que simula uma estrada de chão. Para os amortecedores serem aprovados no experimento, exige-se que as amplitudes das ondas oscilatórias, em cada tipo de superfície, sejam constantes e, ainda, que a amplitude da oscilação do amortecedor no asfalto seja menor do que sua amplitude da oscilação na estrada de chão. O tipo de gráfico que descreve o comportamento oscilatório de um amortecedor aprovado nesse experimento é",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/d7fd9d1b-b277-4217-8f22-661cdab851a1.jpeg",
+        "is_correct": true
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/4bddd622-7d67-4436-8602-1e5ed12d576b.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/1208f24f-3688-4749-8c5c-c3d4ad4e175d.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/1569981b-4054-4505-b071-83754ecf5eb5.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/22832939-c929-40c5-91de-f8d42c68365b.jpeg",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "A",
+    "files": []
+  },
+  {
+    "id": "enem-2024-174",
+    "source": "enem",
+    "year": 2024,
+    "area": "matematica",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Em um jogo virtual para celular, um personagem pode percorrer trajetórias retilíneas voando ou se deslocando ao longo de paredes. Considere que o personagem descreve a trajetória ABCDEF, em que os pontos A, D e E estão em um plano paralelo ao que contém os pontos B e C, sendo esses dois planos ortogonais ao plano da base que contém o ponto F, conforme a figura. A projeção ortogonal, sobre o plano da base, da trajetória ABCDEF descrita pelo personagem é",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/ebc07b54-6eb7-4ea6-93d5-5e572e75365a.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/709611e9-4297-40e0-bbd3-82fec55ba15d.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/59b8bd4b-e589-4868-85e1-6d7d374d264f.jpeg",
+        "is_correct": true
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/3d8c8a12-8a21-46fc-9e39-3d6b2537ae8b.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/3ae75c5c-c87d-4e71-935a-1cedc57aae47.jpeg",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "C",
+    "files": []
+  },
+  {
+    "id": "enem-2025-107",
+    "source": "enem",
+    "year": 2025,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "A figura apresenta a herança genética de uma característica a partir do cruzamento de insetos de uma mesma espécie. Qual alternativa representa a proporção fenotípica da prole resultante do cruzamento entre indivíduos da primeira geração?",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/ce01e74c-8848-4a1d-a9cc-66ff1d1adba9.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/2ce32b3c-86e0-490b-bc56-60702fc12787.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/e9a98859-805e-4d4c-9663-3d7338659de8.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/5bc2d422-f7d5-40a2-9e38-1f91baa2a2f4.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/b91b5ad6-f151-457c-8784-b1800a50f541.jpeg",
+        "is_correct": true
+      }
+    ],
+    "correct_alternative": "E",
+    "files": []
+  },
+  {
+    "id": "enem-2025-108",
+    "source": "enem",
+    "year": 2025,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Para transportar uma caixa do primeiro para o segundo piso de uma construção, um trabalhador precisará arrasta-lá sobre um plano inclinado. O trabalhador começa a arrastar a caixa no primeiro piso, exercendo sobre ela uma força de grande intensidade, paralela ao seu deslocamento. Na medida em que a caixa sobe o plano inclinado, ele decide reduzir a força sobre ela, arrastando-a lentamente até chegar ao segundo piso. Considere que a caixa permanece em movimento nos encontros dos pisos com o plano inclinado, e que a rugosidade entre as superfícies permanece a mesma durante todo o percurso. O comportamento da força de atrito entre a caixa e o chão no plano inclinado é representado em:",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/9f96d0c9-f651-490a-b1b3-75b83a89cd40.png",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/22f0d746-2e73-434b-80fd-3283d773e495.png",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/03fb809c-c3c1-490e-ace6-0f1e6d3777d2.png",
+        "is_correct": true
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/e361fd85-1d00-4ba4-a158-baca9f52497d.png",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/1368a7d4-3634-4637-9f92-0c71d1ac3d48.png",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "C",
+    "files": []
+  },
+  {
+    "id": "enem-2025-127",
+    "source": "enem",
+    "year": 2025,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Nos processos de transformação e reciclagem de recursos naturais, as velocidades das reações químicas são estudadas pela cinética química. Uma reação A → B é realizada na presença e na ausência de uma enzima, com todas as demais condições permanecendo inalteradas. Considere que, no gráfico da variação de energia ao longo dessa reação, a linha contínua representa o avanço da reação na ausência da enzima, e a linha pontilhada, na presença da enzima. O gráfico que representa a situação descrita é:",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/ffe923b1-d2c7-4aa3-ad38-e7d94d013372.png",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/921b6864-d374-4475-a4df-a09fe3c2b8fe.png",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/a4748734-efd9-4e85-9a69-99263d2a0f4a.png",
+        "is_correct": true
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/7882ebc0-e74e-45e9-9d08-10cd33902cec.png",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/6ba2f9fb-d7df-4984-b595-e12376e443bd.png",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "C",
+    "files": []
+  },
+  {
+    "id": "enem-2025-135",
+    "source": "enem",
+    "year": 2025,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "A icterícia é uma doença que acomete recém-nascidos e pode ser tratada com um método de fototerapia conhecido como banho de luz, que consiste na exposição do recém-nascido a uma fonte luminosa equipada com LEDs azuis. Para o monitoramento da dosagem dessa radiação, é utilizada a resposta óptica de um sensor constituído de materiais orgânicos que luminescem quando expostos à luz azul. Com o passar do tempo, essa radiação oxida os materiais do sensor, alterando sua coloração de vermelho-laranja para verde, o que indica o final do tratamento. O gráfico apresenta o espectro de fotoluminescência do sensor em função do comprimento de onda da luz emitida no início do tratamento, quando o sensor, colado na fralda do bebê (Figura 1), luminesce na região do vermelho-laranja (∼600 nm). A Figura 2 apresenta a evolução da coloração do sensor, mostrando que a frequência da luz emitida por ele aumenta em função do tempo de exposição à luz azul. SILVA, M. M. et al. Fabricação de sensor orgânico flexível para aplicação em terapia com luz azul. Tecnol. Metal. Mater. Miner., n. 3, jul.-set. 2011 (adaptado). Os espectros de fotoluminescência do sensor no início e no final do tratamento estão esboçados no gráfico:",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/e880f10f-1c2e-4e27-a6b3-23199ea1101f.png",
+        "is_correct": true
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/c70f48e0-ad68-41ec-a0d6-2b2b6678d2d9.png",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/a6b6c3a1-5642-4b4e-b5a4-8b52930a9a53.png",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/a8baf68d-c29f-4485-87ae-01fed187c166.png",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/4ccd38e7-2d20-4730-8f1e-ac5ffe3e6399.png",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "A",
+    "files": []
+  },
+  {
+    "id": "enem-2025-138",
+    "source": "enem",
+    "year": 2025,
+    "area": "matematica",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Em um jogo de computador, um cubo se encontra inicialmente posicionado conforme indicado na figura. Cada deslocamento efetuado por esse cubo se dá sempre em uma das direções definidas pelos três eixos coordenados. Ao se movimentar a partir da posição inicial, esse cubo se aproximou 3 unidades do plano yz, se afastou 5 unidades do plano xz e se aproximou 4 unidades do plano xy. A figura que apresenta as projeções ortogonais desse cubo sobre os três planos coordenados, após efetuar as movimentações descritas, é",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/9111dbd5-50f5-40b7-9401-760626b46f5a.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/ec7bcdbd-6a04-4e2f-a6ec-6205210f8602.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/7af248c9-3409-4806-b3bd-6dd8fac4303e.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/dd49672c-7ec9-46ae-8544-3e294faa029e.jpeg",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/8e9dc714-5691-444e-8507-abcfb9600395.jpeg",
+        "is_correct": true
+      }
+    ],
+    "correct_alternative": "E",
+    "files": []
+  },
+  {
+    "id": "enem-2024-112",
+    "source": "enem",
+    "year": 2024,
+    "area": "ciencias-natureza",
+    "subtopic": null,
+    "difficulty": null,
+    "language": null,
+    "context": "Um dos exemplos mais conhecidos de herança recessiva ligada ao cromossomo X é o daltonismo. Como em qualquer distúrbio recessivo ligado ao cromossomo X, existem muito mais homens apresentando o fenótipo com esse tipo de daltonismo do que mulheres. Um casal formado por um homem não daltônico e por uma mulher gestante também não daltônica, mas portadora do gene recessivo para esse tipo de daltonismo, está esperando um bebê. Em uma das consultas de pré-natal, o casal recebeu um heredograma que contém todas as possibilidades de genótipo para esse bebê. Considere a legenda: Mulher heterozigota portadora do gene para daltonismo Mulher não daltônica Mulher daltônica Homem não daltônico Homem daltônico GRIFFITHS, A. et al. Introdução à genética. Rio de Janeiro: Guanabara Koogan, 2016 (adaptado). Qual heredograma foi recebido pelo casal?",
+    "alternatives_introduction": "",
+    "alternatives": [
+      {
+        "letter": "A",
+        "text": "",
+        "file": "/imagens/698203c6-a926-478e-b054-2cb699bfac29.png",
+        "is_correct": false
+      },
+      {
+        "letter": "B",
+        "text": "",
+        "file": "/imagens/af1f7187-410e-4d09-a1aa-6a0963f57c5b.png",
+        "is_correct": true
+      },
+      {
+        "letter": "C",
+        "text": "",
+        "file": "/imagens/c6a80a19-bacb-43ce-9ade-211dc8a9b0cf.png",
+        "is_correct": false
+      },
+      {
+        "letter": "D",
+        "text": "",
+        "file": "/imagens/eb23d2e5-c181-40af-b612-74c4a0d73f28.png",
+        "is_correct": false
+      },
+      {
+        "letter": "E",
+        "text": "",
+        "file": "/imagens/fb2b25be-8797-4f24-870b-b5f09b2536eb.png",
+        "is_correct": false
+      }
+    ],
+    "correct_alternative": "B",
+    "files": []
   }
 ]
