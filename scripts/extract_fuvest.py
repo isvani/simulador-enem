@@ -80,8 +80,8 @@ TOTAL_QUESTOES = 90
 # chaves "{01}", travessao/hifen/menos diferentes) - por isso cada ano
 # tem sua propria entrada aqui em vez de um padrao de URL/nome unico.
 CONFIGS = [
-    {"year": 2020, "prova_letra": "V", "prova_file": "fuvest2020_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2020_gabarito_primeira_fase.pdf"},
-    {"year": 2019, "prova_letra": "V", "prova_file": "fuvest2019_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2019_gabarito_primeira_fase.pdf"},
+    {"year": 2017, "prova_letra": "V", "prova_file": "fuvest2017_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2017_gabarito_primeira_fase.pdf", "alt_lower": True},
+    {"year": 2016, "prova_letra": "V", "prova_file": "fuvest2016_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2016_gabarito_primeira_fase.pdf", "alt_lower": True},
 ]
 
 # Anos ja processados em rodadas anteriores desta fase (mantidos aqui so
@@ -90,17 +90,77 @@ CONFIGS = [
 #   {"year": 2025, "prova_letra": "V1", "prova_file": "fuvest2025_primeira_fase_prova_V1.pdf", "gabarito_file": "fuvest2025_gabarito_primeira_fase.pdf"},
 #   {"year": 2023, "prova_letra": "V", "prova_file": "fuvest2023_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2023_gabarito_primeira_fase.pdf"},
 #   {"year": 2022, "prova_letra": "V", "prova_file": "fuvest2022_primeira_fase_tipo_V.pdf", "gabarito_file": "fuvest2022_gabarito_primeira_fase.pdf"},
+#   {"year": 2020, "prova_letra": "V", "prova_file": "fuvest2020_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2020_gabarito_primeira_fase.pdf"},
+#   {"year": 2019, "prova_letra": "V", "prova_file": "fuvest2019_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2019_gabarito_primeira_fase.pdf"},
+#   {"year": 2018, "prova_letra": "V", "prova_file": "fuvest2018_primeira_fase_prova_V.pdf", "gabarito_file": "fuvest2018_gabarito_primeira_fase.pdf", "numbering": "image"},
 # 2021: PDF unico disponivel no acervo ("Caderno Reserva") tem uma fonte
 # com CMap tao quebrado que o texto das questoes extrai vazio (so
 # cabecalhos/numeros saem certo, mesmo a pagina renderizando bem
 # visualmente) - fora do escopo deste parser por ora.
 
 QUESTION_NUM_RE = re.compile(r"^\{?(\d{2})\}?$")
-ALT_RE = re.compile(r"^\(([A-E])\)\s*(.*)$")
-SHARED_TEXT_HEADER_RE = re.compile(r"^TEXTO PARA A[S]? QUEST(?:[ÃA]O|[ÕO]ES)\b(.*)", re.IGNORECASE)
+ALT_RE_PAREN = re.compile(r"^\(([A-E])\)\s*(.*)$")
+ALT_RE_LOWER = re.compile(r"^([a-e])\)\s*(.*)$")
+SHARED_TEXT_HEADER_RE = re.compile(r"^TEXTO[S]? PARA A[S]? QUEST(?:[ÃA]O|[ÕO]ES)\b(.*)", re.IGNORECASE)
+# 2016/2017 tambem usam variantes soltas no meio da frase pra anunciar
+# contexto compartilhado ("Observe a imagem e leia o texto, para
+# responder as questoes de 14 a 16.", "Examine este cartum para
+# responder as questoes 46 e 47.") em vez do cabecalho padrao "TEXTO
+# PARA AS QUESTOES" - capturamos qualquer linha que contenha essa frase,
+# de onde tambem extraimos os indices atendidos.
+ALT_SHARED_HEADER_RE = re.compile(r"responder\s+à[s]?\s+quest(?:[ãõ]o|[õo]es)\b(.*)", re.IGNORECASE)
+
+
+def _match_shared_header(line: str) -> re.Match | None:
+    return SHARED_TEXT_HEADER_RE.match(line) or ALT_SHARED_HEADER_RE.search(line)
 FOOTER_PREFIX = "Concurso Vestibular FUVEST"
 SEPARATOR_RE = re.compile(r"^#+$")
 RASCUNHO_RE = re.compile(r"^RASCUNHO$")
+# Rodape de outro formato, usado em 2016-2018 (sem o prefixo "Concurso
+# Vestibular FUVEST"): um "codigo de barras" numerico, um codigo curto
+# tipo pagina/versao, a linha "PAG NN/NN <letra>" e "Caderno Reserva".
+FOOTER_BARCODE_RE = re.compile(r"^\d{8}$")
+FOOTER_CODE_RE = re.compile(r"^\d{2}\s+\d\s+\d$")
+FOOTER_PAG_RE = re.compile(r"^PAG\s+\d+/\d+\s+[A-Z0-9]+$", re.IGNORECASE)
+FOOTER_CADERNO_RE = re.compile(r"^Caderno Reserva$", re.IGNORECASE)
+# Residuo do cabecalho "Concurso Vestibular FUVEST" quebrado em ate 3
+# linhas em alguns anos (2017): prefixo, depois so o ano (as vezes com
+# caractere de controle no lugar do travessao: "\x00 2017"), depois a
+# letra da prova sozinha numa linha - as duas ultimas sao puro residuo,
+# sem conteudo de questao.
+FOOTER_YEAR_JUNK_RE = re.compile(r"^\W*\d{4}\W*$")
+# 2016-2018: a fonte usada nao tem CMap pro glifo de travessao/hifen
+# ("fala-se", "norte-americana", "césio-137", "N-acetil"...), que sai
+# como caractere de controle (0x00-0x1F) na extracao. Esse mesmo tipo de
+# glifo tambem e usado pra expoente/indice em notacao cientifica
+# ("10⁻¹⁹"), mas nesses casos o caractere de controle nunca fica colado
+# a uma letra dos dois lados (fica cercado de digitos/espacos) - entao
+# so convertemos pra hifen quando ha uma letra imediatamente colada de
+# pelo menos um dos lados, deixando os casos matematicos (ambiguos, sem
+# como saber o digito certo so pelo texto) pro detector de glifos
+# suspeitos e revisao visual.
+HYPHEN_GLYPH_RE = re.compile(r"(?<=[A-Za-zÀ-ÿ])[\x00-\x1f]|[\x00-\x1f](?=[A-Za-zÀ-ÿ])")
+
+
+def _match_alt(line: str, allow_lower: bool = False) -> tuple[str, str] | None:
+    m = ALT_RE_PAREN.match(line)
+    if m:
+        return m.group(1), m.group(2)
+    if allow_lower:
+        m = ALT_RE_LOWER.match(line)
+        if m:
+            return m.group(1).upper(), m.group(2)
+    return None
+
+
+def _is_footer_junk(stripped: str) -> bool:
+    return bool(
+        SEPARATOR_RE.match(stripped)
+        or FOOTER_BARCODE_RE.match(stripped)
+        or FOOTER_CODE_RE.match(stripped)
+        or FOOTER_PAG_RE.match(stripped)
+        or FOOTER_CADERNO_RE.match(stripped)
+    )
 
 # Faixas Unicode que so aparecem neste PDF por causa do CMap quebrado da
 # fonte matematica (glifos de expoente/indice mapeados para pontos de
@@ -132,13 +192,19 @@ ALLOWED_RANGES = [
     (0x25A0, 0x25FF),  # formas geometricas (marcadores)
     (0x2C60, 0x2C7F),  # latin extended-C (subscrito: ⱼ usado em transcricao manual)
     (0x1D400, 0x1D7FF),  # simbolos alfanumericos matematicos (itálico Unicode)
+    (0x0300, 0x036F),  # marcas diacriticas combinantes (v̄ usado em transcricao manual)
+    (0x20D0, 0x20FF),  # marcas diacriticas combinantes p/ simbolos (F⃗ vetor usado em transcricao manual)
 ]
 
 
 def has_suspicious_glyphs(text: str) -> bool:
     return any(
-        ord(ch) > 0x7F and not any(start <= ord(ch) <= end for start, end in ALLOWED_RANGES)
+        (
+            ord(ch) < 0x20
+            or (ord(ch) > 0x7F and not any(start <= ord(ch) <= end for start, end in ALLOWED_RANGES))
+        )
         for ch in text
+        if ch not in ("\t", "\n")
     )
 
 
@@ -151,35 +217,101 @@ def parse_shared_targets(header_rest: str) -> set[int]:
     return set(nums)
 
 
+def _filter_lines(raw_lines: list[str], prova_letra: str) -> list[str]:
+    """Logica de filtragem comum aos dois carregadores (numeracao em
+    texto ou em imagem): corta no RASCUNHO, pula linhas de rodape/
+    cabecalho conhecidas (varios formatos, ver constantes acima) e o
+    residuo de ate 2 linhas extras que pode vir logo apos o prefixo
+    "Concurso Vestibular FUVEST" (ano sozinho, letra da prova sozinha)."""
+    lines: list[str] = []
+    header_skip_remaining = 0
+    for raw_line in raw_lines:
+        stripped = raw_line.strip()
+        if RASCUNHO_RE.match(stripped):
+            break
+        if not stripped or _is_footer_junk(stripped):
+            continue
+        if stripped.upper().startswith(FOOTER_PREFIX.upper()):
+            header_skip_remaining = 2
+            continue
+        if header_skip_remaining > 0:
+            if stripped == prova_letra or FOOTER_YEAR_JUNK_RE.match(stripped):
+                header_skip_remaining -= 1
+                continue
+            header_skip_remaining = 0
+        lines.append(HYPHEN_GLYPH_RE.sub("-", stripped))
+    return lines
+
+
 def load_prova_lines(pdf_path: Path, prova_letra: str) -> list[str]:
     import fitz
 
     doc = fitz.open(pdf_path)
-    lines: list[str] = []
-    stopped = False
-    skip_next_if_letra = False
+    raw_lines: list[str] = []
     for page in doc:
-        if stopped:
-            break
-        for raw_line in page.get_text().split("\n"):
-            stripped = raw_line.strip()
-            if RASCUNHO_RE.match(stripped):
-                stopped = True
-                break
-            if not stripped or SEPARATOR_RE.match(stripped):
-                continue
-            if stripped.startswith(FOOTER_PREFIX):
-                skip_next_if_letra = True
-                continue
-            if skip_next_if_letra:
-                skip_next_if_letra = False
-                if stripped == prova_letra:
+        raw_lines.extend(page.get_text().split("\n"))
+    return _filter_lines(raw_lines, prova_letra)
+
+
+def _detect_image_number_markers(doc) -> list[tuple[int, int, float]]:
+    """2018: o numero de cada questao nao e texto, e um par de digitos
+    rasterizados (fonte de numeracao convertida em imagem). O primeiro
+    digito (dezena) sempre cai no mesmo x0 por coluna (~34pt na coluna
+    esquerda, ~306pt na direita) com altura ~9pt - usamos so ele (nao
+    precisamos ler o valor do digito, so a posicao, ja que a ordem de
+    leitura garante a sequencia 1..90). Retorna (pagina, coluna, y0)
+    ordenado na ordem de leitura (pagina, coluna esquerda->direita,
+    topo->base)."""
+    markers: list[tuple[int, int, float]] = []
+    for page_no, page in enumerate(doc):
+        for im in page.get_images(full=True):
+            xref = im[0]
+            for r in page.get_image_rects(xref):
+                h = r.y1 - r.y0
+                if 8.5 <= h <= 9.5 and (34.0 <= r.x0 <= 35.0 or 306.0 <= r.x0 <= 307.0):
+                    col = 0 if r.x0 < 160 else 1
+                    markers.append((page_no, col, r.y0))
+    markers.sort()
+    return markers
+
+
+def load_prova_lines_imgnum(pdf_path: Path, prova_letra: str) -> list[str]:
+    """Variante de load_prova_lines() para anos onde o numero da questao
+    e uma imagem (2018): reconstroi a ordem de leitura combinando as
+    linhas de texto normais com marcadores sinteticos "01".."90" nas
+    posicoes (pagina, coluna, y) onde a imagem do numero foi detectada,
+    permitindo reusar parse_questions() sem nenhuma mudanca."""
+    import fitz
+
+    doc = fitz.open(pdf_path)
+    markers = _detect_image_number_markers(doc)
+
+    items: list[tuple[int, int, float, str]] = [
+        (page_no, col, y0, f"{seq:02d}") for seq, (page_no, col, y0) in enumerate(markers, start=1)
+    ]
+    for page_no, page in enumerate(doc):
+        d = page.get_text("dict")
+        for block in d["blocks"]:
+            for line in block.get("lines", []):
+                y0 = line["bbox"][1]
+                # faixa de margem (logo/numero de pagina corrompidos em
+                # glifos de controle, sem nenhum padrao de texto
+                # reconhecivel) - o conteudo de verdade nunca cai aqui.
+                if y0 < 32 or y0 > 795:
                     continue
-            lines.append(stripped)
-    return lines
+                text = "".join(span["text"] for span in line["spans"]).strip()
+                if not text:
+                    continue
+                x0 = line["bbox"][0]
+                col = 0 if x0 < 297 else 1
+                items.append((page_no, col, y0, text))
+    items.sort(key=lambda t: (t[0], t[1], t[2]))
+
+    raw_lines = [text for _page_no, _col, _y0, text in items]
+    return _filter_lines(raw_lines, prova_letra)
 
 
-def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
+def parse_questions(lines: list[str], alt_lower: bool = False) -> tuple[dict[int, dict], list[int]]:
     questions: dict[int, dict] = {}
     current_index: int | None = None
     current_context: list[str] = []
@@ -192,7 +324,7 @@ def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
 
     def flush():
         nonlocal current_index, current_context, current_alts, current_alt_letter
-        if current_index is not None and current_alts:
+        if current_index is not None:
             questions[current_index] = {
                 "context": " ".join(current_context).strip(),
                 "alternatives": {
@@ -204,11 +336,22 @@ def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
         current_alts = {}
         current_alt_letter = None
 
-    for line in lines:
-        header_m = SHARED_TEXT_HEADER_RE.match(line)
+    skip_next_line = False
+    for i, line in enumerate(lines):
+        if skip_next_line:
+            skip_next_line = False
+            continue
+        header_m = _match_shared_header(line)
         if header_m:
             flush()
             shared_targets = parse_shared_targets(header_m.group(1))
+            if not shared_targets and i + 1 < len(lines):
+                # a variante "Observe a imagem e leia o texto, para
+                # responder as questoes" (2016/2017) as vezes quebra o
+                # intervalo de indices pra linha seguinte ("de 14 a 16.")
+                shared_targets = parse_shared_targets(lines[i + 1])
+                if shared_targets:
+                    skip_next_line = True
             shared_lines = []
             collecting_shared = True
             continue
@@ -233,9 +376,9 @@ def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
         if current_index is None:
             continue
 
-        am = ALT_RE.match(line)
+        am = _match_alt(line, allow_lower=alt_lower)
         if am:
-            letter, text = am.group(1), am.group(2)
+            letter, text = am
             current_alt_letter = letter
             current_alts[letter] = [text.strip()] if text.strip() else []
         elif current_alt_letter is not None:
@@ -249,19 +392,25 @@ def parse_questions(lines: list[str]) -> tuple[dict[int, dict], list[int]]:
 
 
 def _parse_gabarito_correspondencia(full: str, prova_letra: str) -> dict[int, str]:
-    """Formato usado em 2022-2025: tabela "GABARITO DE CORRESPONDENCIA",
-    uma linha por questao canonica no formato [resposta, num_V, num_K,
-    num_Q, num_X, num_Z, ...]."""
+    """Formato usado em 2016-2018 e 2022-2025: tabela de correspondencia
+    (com titulo "GABARITO DE CORRESPONDENCIA" ou sem titulo extraivel,
+    2016/2017), uma linha por questao canonica no formato [resposta,
+    num_V, num_K, num_Q, num_X, num_Z, ...]. O rotulo de cada coluna e
+    "PROVA X" (2019+) ou "GRUPO X" (2016/2017)."""
     tokens = [t.strip() for t in full.split("\n") if t.strip()]
-    header_m = re.search(r"RESPOSTA((?:\s+PROVA\s+\S+)+)", full, re.IGNORECASE)
-    prova_order = [p.upper() for p in re.findall(r"PROVA\s+(\S+)", header_m.group(1), re.IGNORECASE)]
+    header_m = re.search(r"RESPOSTA((?:\s+(?:PROVA|GRUPO)\s+\S+)+)", full, re.IGNORECASE)
+    prova_order = [p.upper() for p in re.findall(r"(?:PROVA|GRUPO)\s+(\S+)", header_m.group(1), re.IGNORECASE)]
     col_index = prova_order.index(prova_letra.upper())
 
-    start = next(i for i, t in enumerate(tokens) if "CORRESPOND" in t.upper())
+    # nao precisamos achar onde comeca a tabela: nenhum token de
+    # cabecalho ("RESPOSTA", "PROVA"/"GRUPO", ou a letra da prova V/K/Q/
+    # X/Z) da fullmatch em [A-E], entao o loop abaixo so "engata" numa
+    # linha de dado de verdade (letra de resposta seguida de n_cols
+    # numeros) e resincroniza sozinho token a token ate la.
+    n_cols = len(prova_order)
 
     gabarito: dict[int, str] = {}
-    i = start
-    n_cols = len(prova_order)
+    i = 0
     while i < len(tokens):
         if re.fullmatch(r"[A-E]", tokens[i]):
             row = tokens[i : i + 1 + n_cols]
@@ -317,7 +466,8 @@ def parse_gabarito(pdf_path: Path, prova_letra: str) -> dict[int, str]:
     doc = fitz.open(pdf_path)
     full = "\n".join(page.get_text() for page in doc)
 
-    if "CORRESPOND" in full.upper():
+    full_upper = full.upper()
+    if "CORRESPOND" in full_upper or "GRUPO" in full_upper:
         return _parse_gabarito_correspondencia(full, prova_letra)
     return _parse_gabarito_pairs(full, prova_letra)
 
@@ -381,8 +531,11 @@ def main() -> None:
         prova_path = PDF_DIR / cfg["prova_file"]
         gabarito_path = PDF_DIR / cfg["gabarito_file"]
 
-        lines = load_prova_lines(prova_path, prova_letra)
-        parsed, missing = parse_questions(lines)
+        if cfg.get("numbering") == "image":
+            lines = load_prova_lines_imgnum(prova_path, prova_letra)
+        else:
+            lines = load_prova_lines(prova_path, prova_letra)
+        parsed, missing = parse_questions(lines, alt_lower=cfg.get("alt_lower", False))
         gabarito = parse_gabarito(gabarito_path, prova_letra)
         complete, pending = build_questions(year, parsed, gabarito)
 

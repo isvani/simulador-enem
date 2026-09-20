@@ -1080,13 +1080,71 @@ fontes estarem prontas.
         ainda com glifos quebrados (só o contexto tinha sido corrigido
         antes). Scan final: zero glifos suspeitos remanescentes nas 540
         questões FUVEST.
-      - **Pendente pra fechar a Fase 5 de fato**: com 2019-2025 prontos
-        (exceto 2021, fora do escopo), faltam os anos de 1998 a 2018
-        (21 anos) pra cobrir todo o intervalo digital nativo — mesmo
-        padrão de lotes pequenos, do mais recente pro mais antigo, com
-        checkpoint a cada lote. 1997 pra trás fica fora do escopo
-        automatizável (exigiria OCR de verdade, projeto à parte).
-        Continuar isso fica pra uma próxima sessão.
+      - **Extensão (2026-09-19/20): mais 3 anos (2018, 2017, 2016) — 810
+        questões FUVEST no total agora.** Esse trio trouxe mais
+        variação estrutural que qualquer lote anterior:
+        - **2018 numera as questões via imagem, não texto**: cada
+          número de questão é uma dupla de dígitos rasterizados (bitmap
+          por digito), sem nenhum texto associado. Detecção nova
+          (`_detect_image_number_markers()` em `extract_fuvest.py`):
+          localiza pelo tamanho/posição fixa (~9pt de altura, sempre no
+          mesmo x0 por coluna) só a imagem do dígito das dezenas — não
+          precisa nem ler o valor do dígito, já que a ordem de leitura
+          (página → coluna → y) garante a sequência 1..90 — e sintetiza
+          marcadores "01".."90" que alimentam o mesmo parser de texto de
+          sempre (`load_prova_lines_imgnum()`).
+        - **2016/2017 corrompem o hífen/travessão em vários caracteres
+          de controle ASCII** (0x00-0x1F, variando por trecho/fonte
+          embutida), não só em blocos Unicode altos — muito mais
+          disseminado que a corrupção de expoente/índice já conhecida,
+          porque hífen aparece o tempo todo em português (ênclise,
+          palavras compostas). `has_suspicious_glyphs()` passou a
+          sinalizar também `ord(ch) < 0x20`, e uma regex nova
+          (`HYPHEN_GLYPH_RE`) corrige automaticamente qualquer caractere
+          de controle colado a uma letra (sem espaço) para "-", sem
+          revisão visual — só os casos ambíguos (colados a dígitos, ou
+          expoente de notação científica) continuam pendentes.
+        - **2016/2017 também usam variantes soltas de cabeçalho de
+          texto-base** ("Observe a imagem e leia o texto, para
+          responder às questões de 14 a 16.", "Examine este cartum para
+          responder às questões 46 e 47.") em vez do padrão "TEXTO PARA
+          AS QUESTÕES X" — e às vezes o intervalo de índices ("de 14 a
+          16.") cai na linha seguinte por quebra de layout.
+          `_match_shared_header()` agora casa essas variantes em
+          qualquer lugar da linha (`ALT_SHARED_HEADER_RE`), com fallback
+          pra linha seguinte quando a linha do cabeçalho não tem
+          números. Achado retroativo: esse bug tinha deixado **6
+          questões já "completas" em lotes anteriores sem o texto-base**
+          (fuvest-2017-14/15/16, a Mayombe; fuvest-2017-17/18, poema; e
+          fuvest-2016-46/47, um cartum sem nenhuma imagem associada —
+          image cortada manualmente da página anterior) — corrigidas
+          direto no banco depois de identificadas.
+        - **2016/2017 usam "GRUPO" em vez de "PROVA"** no cabeçalho da
+          tabela de gabarito, e o título "GABARITO DE CORRESPONDÊNCIA"
+          nem sempre é extraível como texto — `_parse_gabarito_correspondencia()`
+          agora aceita ambos os rótulos e não depende mais de achar o
+          título (o loop já resincroniza sozinho pela primeira linha de
+          dados válida, letra + N números).
+        - Lição herdada do lote anterior (glifos suspeitos) se repetiu:
+          depois de aplicar as correções, um scan geral achou mais
+          **7 questões com pendências que eu mesmo tinha deixado
+          passar** (correções parciais — só contexto ou só 1
+          alternativa) em fuvest-2018-{25,29,30,33,71,72,73} e
+          fuvest-2016-{25,31,33} — todas corrigidas depois de um
+          segundo scan. Prática que ficou fixada: **sempre re-rodar
+          `has_suspicious_glyphs()` sobre TODAS as alternativas de cada
+          questão corrigida, não só sobre os campos que a correção
+          escrita explicitamente tocou** — uma correção parcial pode
+          deixar destroços do parse original em campos vizinhos.
+        - Scan final: zero glifos suspeitos remanescentes nas 810
+        questões FUVEST (9 anos: 2016-2020, 2022-2025).
+      - **Pendente pra fechar a Fase 5 de fato**: com 2016-2020 e
+        2022-2025 prontos (exceto 2021, fora do escopo), faltam os anos
+        de 1998 a 2015 (18 anos) pra cobrir todo o intervalo digital
+        nativo — mesmo padrão de lotes pequenos, do mais recente pro
+        mais antigo, com checkpoint a cada lote. 1997 pra trás fica fora
+        do escopo automatizável (exigiria OCR de verdade, projeto à
+        parte). Continuar isso fica pra uma próxima sessão.
 - [ ] **Fase 6 — Adicionar ITA/UNICAMP** — Mesmo processo da Fase 5 para
       as duas bancas. UNICAMP: só a 1ª fase. ITA: atenção especial à
       notação matemática pesada (pode exigir mais rasterização de

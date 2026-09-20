@@ -14,8 +14,9 @@ BANCO = ROOT / "dados" / "banco_questoes.json"
 CACHE = ROOT / "scripts" / "_pdf_cache"
 
 FILES = [
-    "fuvest2020_classificacao.json",
-    "fuvest2019_classificacao.json",
+    "fuvest2018_classificacao.json",
+    "fuvest2017_classificacao.json",
+    "fuvest2016_classificacao.json",
 ]
 
 
@@ -34,7 +35,7 @@ def main() -> None:
             q["difficulty"] = c["difficulty"]
             aplicadas += 1
 
-    target_ids = {q["id"] for q in banco if q["source"] == "fuvest" and q["year"] in (2020, 2019)}
+    target_ids = {q["id"] for q in banco if q["source"] == "fuvest" and q["year"] in (2018, 2017, 2016)}
     faltando = target_ids - classificacao.keys()
 
     BANCO.write_text(json.dumps(banco, ensure_ascii=False, indent=2), encoding="utf-8")
