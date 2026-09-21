@@ -632,7 +632,7 @@ function renderResultado(resultado, questaoPorId) {
     } else {
       const semDados = document.createElement('p');
       semDados.className = 'dica';
-      semDados.textContent = `Sua resposta: ${r.resposta_usuario || '(em branco)'} — Gabarito: ${r.resposta_correta || 'anulada'}`;
+      semDados.textContent = `Enunciado indisponível (a questão ${r.questao_id} não foi encontrada no banco atual). Sua resposta: ${r.resposta_usuario || '(em branco)'} — Gabarito: ${r.resposta_correta || 'anulada'}`;
       cartao.appendChild(semDados);
     }
 
@@ -720,6 +720,10 @@ function renderHistorico(tentativas) {
 async function verDetalheTentativa(tentativa) {
   const ids = [...new Set(tentativa.respostas.map((r) => r.questao_id))];
   const resp = await fetch(`/questoes/por-id?ids=${encodeURIComponent(ids.join(','))}`);
+  if (!resp.ok) {
+    alert('Não foi possível carregar os enunciados desse simulado.');
+    return;
+  }
   const questoes = await resp.json();
   const questaoPorId = new Map(questoes.map((q) => [q.id, q]));
 
