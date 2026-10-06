@@ -1,8 +1,9 @@
 """
-Verifica questoes de 2024/2025 que mencionam "figura/fotografia/grafico/mapa/..."
-no texto mas nao tem nenhuma imagem associada no banco — o parser
-extract_enem_2024_2025.py nunca extraiu imagens de contexto (so texto puro),
-entao qualquer foto/diagrama original pode ter sido perdido silenciosamente.
+Verifica questoes do ENEM (todos os anos) que mencionam
+"figura/fotografia/grafico/mapa/..." no texto mas nao tem nenhuma imagem
+associada no banco — varios parsers (extract_enem_legacy.py,
+extract_enem_2024_2025.py) so extraem texto puro do contexto, entao
+qualquer foto/diagrama original pode ter sido perdido silenciosamente.
 
 Para cada candidata: acha a pagina do PDF pela "QUESTAO N", localiza a
 posicao (bbox) do cabecalho da questao e do proximo cabecalho (delimitando
@@ -118,7 +119,7 @@ def main() -> None:
 
     candidates = []
     for q in data:
-        if q["year"] not in (2024, 2025):
+        if q["source"] != "enem":
             continue
         if not is_missing_image(q.get("context"), q.get("files") or []):
             continue

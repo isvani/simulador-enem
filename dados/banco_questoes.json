@@ -7460,7 +7460,7 @@
     "subtopic": "Geografia Física e Meio Ambiente",
     "difficulty": "dificil",
     "language": null,
-    "context": "O clima é um dos elementos fundamentais não só na caracterização das paisagens naturais, mas também no histórico de ocupação do espaço geográfico.",
+    "context": "![](/imagens/b26fc271-374e-4f35-9a5d-cef02126f2d8.png)\n\nO clima é um dos elementos fundamentais não só na caracterização das paisagens naturais, mas também no histórico de ocupação do espaço geográfico.",
     "alternatives_introduction": "Tendo em vista determinada restrição climática, a figura que representa o uso de tecnologia voltada para a produção é:",
     "alternatives": [
       {
@@ -7495,7 +7495,9 @@
       }
     ],
     "correct_alternative": "D",
-    "files": []
+    "files": [
+      "/imagens/b26fc271-374e-4f35-9a5d-cef02126f2d8.png"
+    ]
   },
   {
     "id": "enem-2009-86",
@@ -15652,7 +15654,7 @@
     "subtopic": "Física (Termologia, Óptica e Ondas)",
     "difficulty": "dificil",
     "language": null,
-    "context": "Um grupo de cientistas liderado por pesquisadores do instituto de Tecnologia da Califórnia (Caltech), nos Estados Unidos, construiu o primeiro metamaterial que apresenta valor negativo do índice de refração relativo para a luz visível. Denomina-se metamaterial um material óptico artificial, tridimensional, formado por pequenas estruturas menores do que o comprimento de onda da luz, o que lhe dá propriedades e comportamentos que não são encontrados em materiais naturais. Esse material tem sido chamado de “canhoto”.\n\nDisponível em: http://www.invocaçãotecnologica.com.br. Acesso em: 28 abr. (adaptado).",
+    "context": "![](/imagens/c952dfc7-ac5a-4b5f-8013-743384ebb241.png)\n\nUm grupo de cientistas liderado por pesquisadores do instituto de Tecnologia da Califórnia (Caltech), nos Estados Unidos, construiu o primeiro metamaterial que apresenta valor negativo do índice de refração relativo para a luz visível. Denomina-se metamaterial um material óptico artificial, tridimensional, formado por pequenas estruturas menores do que o comprimento de onda da luz, o que lhe dá propriedades e comportamentos que não são encontrados em materiais naturais. Esse material tem sido chamado de “canhoto”.\n\nDisponível em: http://www.invocaçãotecnologica.com.br. Acesso em: 28 abr. (adaptado).",
     "alternatives_introduction": "Considerando o comportamento atípico desse metamaterial, qual é a figura que representa a refração da luz ao passar do ar para esse meio?",
     "alternatives": [
       {
@@ -15687,7 +15689,9 @@
       }
     ],
     "correct_alternative": "D",
-    "files": []
+    "files": [
+      "/imagens/c952dfc7-ac5a-4b5f-8013-743384ebb241.png"
+    ]
   },
   {
     "id": "enem-2010-85",
@@ -20694,7 +20698,7 @@
     "subtopic": "Funções",
     "difficulty": "medio",
     "language": null,
-    "context": "Uma empresa de telefone fixa oferece dois planos aos seus clientes: no plano K, o cliente paga R$ 29,90 por  200 minutos mensais e R$ 0,20 por cada minuto excedente; no plano Z, paga R$ 49,90 por 300 minutos mensais e R$ 0,10 por cada minuto excedente.",
+    "context": "![](/imagens/980203cd-b773-4319-b55e-77564c1a0471.png)\n\nUma empresa de telefone fixa oferece dois planos aos seus clientes: no plano K, o cliente paga R$ 29,90 por  200 minutos mensais e R$ 0,20 por cada minuto excedente; no plano Z, paga R$ 49,90 por 300 minutos mensais e R$ 0,10 por cada minuto excedente.",
     "alternatives_introduction": "O gráfico que representa o valor pago, em reais, nos dois planos em função dos minutos utilizados é",
     "alternatives": [
       {
@@ -20729,7 +20733,9 @@
       }
     ],
     "correct_alternative": "D",
-    "files": []
+    "files": [
+      "/imagens/980203cd-b773-4319-b55e-77564c1a0471.png"
+    ]
   },
   {
     "id": "enem-2011-18",
@@ -178887,7 +178893,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Na tirinha, Calvin se divertia em um balanço antes de soltar-se dele e cair ao chão. Em sua fala, ele demonstra ter imaginado que permaneceria em movimento circular. Porém, a força gravitacional, que permanece atuando no garoto, modifica a direção de sua velocidade, fazendo com que ele chegue ao chão da maneira ilustrada no último quadrinho. WATTERSON, B. Disponível em: https://tiras-do-calvin.tumblr.com. Acesso em: 19 nov. 2021 (adaptado). Qual vetor representa a força resultante exercida pelo chão sobre Calvin no exato momento em que ele toca o chão?",
+    "context": "![](/imagens/80be54e9-1cc9-4fb0-80ed-115f5747b4a1.png)\n\nNa tirinha, Calvin se divertia em um balanço antes de soltar-se dele e cair ao chão. Em sua fala, ele demonstra ter imaginado que permaneceria em movimento circular. Porém, a força gravitacional, que permanece atuando no garoto, modifica a direção de sua velocidade, fazendo com que ele chegue ao chão da maneira ilustrada no último quadrinho. WATTERSON, B. Disponível em: https://tiras-do-calvin.tumblr.com. Acesso em: 19 nov. 2021 (adaptado). Qual vetor representa a força resultante exercida pelo chão sobre Calvin no exato momento em que ele toca o chão?",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -178922,7 +178928,9 @@
       }
     ],
     "correct_alternative": "A",
-    "files": []
+    "files": [
+      "/imagens/80be54e9-1cc9-4fb0-80ed-115f5747b4a1.png"
+    ]
   },
   {
     "id": "enem-2024-127",
@@ -178932,7 +178940,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Em um experimento de laboratório, duas barras metálicas, A e B, são carregadas com cargas opostas e imersas em óleo. Farelo de milho é jogado sobre o óleo e, após um certo tempo, o farelo assume o formato das linhas de campo elétrico entre as barras. A figura representa a vista superior desse experimento. ALMEIDA, M. A. T. Introdução às ciências físicas 2 — volume 4: módulo 4. Rio de Janeiro: Fundação CECIERJ, 2007 (adaptado). Ao repetir o experimento colocando um cilindro metálico oco entre as placas, o esquema que representa o formato das linhas de campo assumido pelo farelo é:",
+    "context": "![](/imagens/e1a8a938-f55b-4ed7-94e0-77c8b6da587d.png)\n\nEm um experimento de laboratório, duas barras metálicas, A e B, são carregadas com cargas opostas e imersas em óleo. Farelo de milho é jogado sobre o óleo e, após um certo tempo, o farelo assume o formato das linhas de campo elétrico entre as barras. A figura representa a vista superior desse experimento. ALMEIDA, M. A. T. Introdução às ciências físicas 2 — volume 4: módulo 4. Rio de Janeiro: Fundação CECIERJ, 2007 (adaptado). Ao repetir o experimento colocando um cilindro metálico oco entre as placas, o esquema que representa o formato das linhas de campo assumido pelo farelo é:",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -178967,7 +178975,9 @@
       }
     ],
     "correct_alternative": "E",
-    "files": []
+    "files": [
+      "/imagens/e1a8a938-f55b-4ed7-94e0-77c8b6da587d.png"
+    ]
   },
   {
     "id": "enem-2024-131",
@@ -178977,7 +178987,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "O LED é um dispositivo eletrônico que conduz corrente elétrica em um único sentido, sendo caracterizado por uma tensão e uma corrente máxima de funcionamento, Imáx. Um LED acende apenas se a corrente que o percorre está no sentido permitido e se a diferença de potencial à qual está submetido é igual ou superior à sua tensão de funcionamento. A figura ilustra o símbolo do LED usado na representação de circuitos. Um estudante de física analisa as propriedades do LED em um circuito simples de corrente contínua. Ele dispõe dos seguintes materiais: uma bateria ideal de 4,5 V; dois LEDs de tensão 3,0 V e Imáx = 1,0 mA cada; e dois resistores de 1,5 kΩ cada. O circuito que o estudante pode montar, para que ambos os LEDs fiquem acesos e cada um seja percorrido por Imáx, é",
+    "context": "![](/imagens/b8a3278f-eb43-4dfe-ba9e-f5f208992c89.png)\n\nO LED é um dispositivo eletrônico que conduz corrente elétrica em um único sentido, sendo caracterizado por uma tensão e uma corrente máxima de funcionamento, Imáx. Um LED acende apenas se a corrente que o percorre está no sentido permitido e se a diferença de potencial à qual está submetido é igual ou superior à sua tensão de funcionamento. A figura ilustra o símbolo do LED usado na representação de circuitos. Um estudante de física analisa as propriedades do LED em um circuito simples de corrente contínua. Ele dispõe dos seguintes materiais: uma bateria ideal de 4,5 V; dois LEDs de tensão 3,0 V e Imáx = 1,0 mA cada; e dois resistores de 1,5 kΩ cada. O circuito que o estudante pode montar, para que ambos os LEDs fiquem acesos e cada um seja percorrido por Imáx, é",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179012,7 +179022,9 @@
       }
     ],
     "correct_alternative": "B",
-    "files": []
+    "files": [
+      "/imagens/b8a3278f-eb43-4dfe-ba9e-f5f208992c89.png"
+    ]
   },
   {
     "id": "enem-2024-161",
@@ -179022,7 +179034,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Um tanque, em formato de paralelepípedo reto retângulo, tem em seu interior dois anteparos verticais, fixados na sua base e em duas paredes opostas, sendo perpendiculares a elas, conforme a figura. Esses anteparos, de espessuras desprezíveis, estão instalados de maneira a dividir a base do tanque em três retângulos congruentes, tendo suas alturas iguais à metade e a um quarto da altura do tanque. O tanque é abastecido por uma entrada situada no teto, através de um duto que despeja água a uma vazão constante, sendo necessárias 12 horas para finalizar o seu enchimento. O gráfico que descreve, em cada instante, a maior altura de coluna de água, dentre aquelas que vão sendo formadas ao longo do enchimento do tanque, é",
+    "context": "![](/imagens/f66afe1d-6fb4-4b9a-be7a-da7f4e5e7aee.png)\n\nUm tanque, em formato de paralelepípedo reto retângulo, tem em seu interior dois anteparos verticais, fixados na sua base e em duas paredes opostas, sendo perpendiculares a elas, conforme a figura. Esses anteparos, de espessuras desprezíveis, estão instalados de maneira a dividir a base do tanque em três retângulos congruentes, tendo suas alturas iguais à metade e a um quarto da altura do tanque. O tanque é abastecido por uma entrada situada no teto, através de um duto que despeja água a uma vazão constante, sendo necessárias 12 horas para finalizar o seu enchimento. O gráfico que descreve, em cada instante, a maior altura de coluna de água, dentre aquelas que vão sendo formadas ao longo do enchimento do tanque, é",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179057,7 +179069,9 @@
       }
     ],
     "correct_alternative": "B",
-    "files": []
+    "files": [
+      "/imagens/f66afe1d-6fb4-4b9a-be7a-da7f4e5e7aee.png"
+    ]
   },
   {
     "id": "enem-2024-168",
@@ -179067,7 +179081,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Projetistas de uma fábrica de amortecedores realizaram uma série de experimentos que produziram oscilações semelhantes ao comportamento do gráfico de uma senoide, para qualquer tipo de estrada. Cada experimento teve duração de 20 minutos, sendo os 9 primeiros minutos em superfície que simula uma rodovia asfaltada, e os 11 minutos restantes em superfície que simula uma estrada de chão. Para os amortecedores serem aprovados no experimento, exige-se que as amplitudes das ondas oscilatórias, em cada tipo de superfície, sejam constantes e, ainda, que a amplitude da oscilação do amortecedor no asfalto seja menor do que sua amplitude da oscilação na estrada de chão. O tipo de gráfico que descreve o comportamento oscilatório de um amortecedor aprovado nesse experimento é",
+    "context": "![](/imagens/3ae81337-5aa2-4cc5-aada-5784802f5a5d.png)\n\nProjetistas de uma fábrica de amortecedores realizaram uma série de experimentos que produziram oscilações semelhantes ao comportamento do gráfico de uma senoide, para qualquer tipo de estrada. Cada experimento teve duração de 20 minutos, sendo os 9 primeiros minutos em superfície que simula uma rodovia asfaltada, e os 11 minutos restantes em superfície que simula uma estrada de chão. Para os amortecedores serem aprovados no experimento, exige-se que as amplitudes das ondas oscilatórias, em cada tipo de superfície, sejam constantes e, ainda, que a amplitude da oscilação do amortecedor no asfalto seja menor do que sua amplitude da oscilação na estrada de chão. O tipo de gráfico que descreve o comportamento oscilatório de um amortecedor aprovado nesse experimento é",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179102,7 +179116,9 @@
       }
     ],
     "correct_alternative": "A",
-    "files": []
+    "files": [
+      "/imagens/3ae81337-5aa2-4cc5-aada-5784802f5a5d.png"
+    ]
   },
   {
     "id": "enem-2024-174",
@@ -179112,7 +179128,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Em um jogo virtual para celular, um personagem pode percorrer trajetórias retilíneas voando ou se deslocando ao longo de paredes. Considere que o personagem descreve a trajetória ABCDEF, em que os pontos A, D e E estão em um plano paralelo ao que contém os pontos B e C, sendo esses dois planos ortogonais ao plano da base que contém o ponto F, conforme a figura. A projeção ortogonal, sobre o plano da base, da trajetória ABCDEF descrita pelo personagem é",
+    "context": "![](/imagens/fd411386-8577-4d7c-93d4-d7421e9f5517.png)\n\nEm um jogo virtual para celular, um personagem pode percorrer trajetórias retilíneas voando ou se deslocando ao longo de paredes. Considere que o personagem descreve a trajetória ABCDEF, em que os pontos A, D e E estão em um plano paralelo ao que contém os pontos B e C, sendo esses dois planos ortogonais ao plano da base que contém o ponto F, conforme a figura. A projeção ortogonal, sobre o plano da base, da trajetória ABCDEF descrita pelo personagem é",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179147,7 +179163,9 @@
       }
     ],
     "correct_alternative": "C",
-    "files": []
+    "files": [
+      "/imagens/fd411386-8577-4d7c-93d4-d7421e9f5517.png"
+    ]
   },
   {
     "id": "enem-2025-107",
@@ -179157,7 +179175,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "A figura apresenta a herança genética de uma característica a partir do cruzamento de insetos de uma mesma espécie. Qual alternativa representa a proporção fenotípica da prole resultante do cruzamento entre indivíduos da primeira geração?",
+    "context": "![](/imagens/33cd3593-1815-42e4-bbaa-fa718b152b84.png)\n\nA figura apresenta a herança genética de uma característica a partir do cruzamento de insetos de uma mesma espécie. Qual alternativa representa a proporção fenotípica da prole resultante do cruzamento entre indivíduos da primeira geração?",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179192,7 +179210,9 @@
       }
     ],
     "correct_alternative": "E",
-    "files": []
+    "files": [
+      "/imagens/33cd3593-1815-42e4-bbaa-fa718b152b84.png"
+    ]
   },
   {
     "id": "enem-2025-108",
@@ -179247,7 +179267,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Nos processos de transformação e reciclagem de recursos naturais, as velocidades das reações químicas são estudadas pela cinética química. Uma reação A → B é realizada na presença e na ausência de uma enzima, com todas as demais condições permanecendo inalteradas. Considere que, no gráfico da variação de energia ao longo dessa reação, a linha contínua representa o avanço da reação na ausência da enzima, e a linha pontilhada, na presença da enzima. O gráfico que representa a situação descrita é:",
+    "context": "![](/imagens/c8d70f7f-edc2-41f2-867a-e7b171a567b0.png)\n\nNos processos de transformação e reciclagem de recursos naturais, as velocidades das reações químicas são estudadas pela cinética química. Uma reação A → B é realizada na presença e na ausência de uma enzima, com todas as demais condições permanecendo inalteradas. Considere que, no gráfico da variação de energia ao longo dessa reação, a linha contínua representa o avanço da reação na ausência da enzima, e a linha pontilhada, na presença da enzima. O gráfico que representa a situação descrita é:",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179282,7 +179302,9 @@
       }
     ],
     "correct_alternative": "C",
-    "files": []
+    "files": [
+      "/imagens/c8d70f7f-edc2-41f2-867a-e7b171a567b0.png"
+    ]
   },
   {
     "id": "enem-2025-135",
@@ -179292,7 +179314,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "A icterícia é uma doença que acomete recém-nascidos e pode ser tratada com um método de fototerapia conhecido como banho de luz, que consiste na exposição do recém-nascido a uma fonte luminosa equipada com LEDs azuis. Para o monitoramento da dosagem dessa radiação, é utilizada a resposta óptica de um sensor constituído de materiais orgânicos que luminescem quando expostos à luz azul. Com o passar do tempo, essa radiação oxida os materiais do sensor, alterando sua coloração de vermelho-laranja para verde, o que indica o final do tratamento. O gráfico apresenta o espectro de fotoluminescência do sensor em função do comprimento de onda da luz emitida no início do tratamento, quando o sensor, colado na fralda do bebê (Figura 1), luminesce na região do vermelho-laranja (∼600 nm). A Figura 2 apresenta a evolução da coloração do sensor, mostrando que a frequência da luz emitida por ele aumenta em função do tempo de exposição à luz azul. SILVA, M. M. et al. Fabricação de sensor orgânico flexível para aplicação em terapia com luz azul. Tecnol. Metal. Mater. Miner., n. 3, jul.-set. 2011 (adaptado). Os espectros de fotoluminescência do sensor no início e no final do tratamento estão esboçados no gráfico:",
+    "context": "![](/imagens/71993020-c87c-4438-890b-0ccc69d6d094.png)\n\nA icterícia é uma doença que acomete recém-nascidos e pode ser tratada com um método de fototerapia conhecido como banho de luz, que consiste na exposição do recém-nascido a uma fonte luminosa equipada com LEDs azuis. Para o monitoramento da dosagem dessa radiação, é utilizada a resposta óptica de um sensor constituído de materiais orgânicos que luminescem quando expostos à luz azul. Com o passar do tempo, essa radiação oxida os materiais do sensor, alterando sua coloração de vermelho-laranja para verde, o que indica o final do tratamento. O gráfico apresenta o espectro de fotoluminescência do sensor em função do comprimento de onda da luz emitida no início do tratamento, quando o sensor, colado na fralda do bebê (Figura 1), luminesce na região do vermelho-laranja (∼600 nm). A Figura 2 apresenta a evolução da coloração do sensor, mostrando que a frequência da luz emitida por ele aumenta em função do tempo de exposição à luz azul. SILVA, M. M. et al. Fabricação de sensor orgânico flexível para aplicação em terapia com luz azul. Tecnol. Metal. Mater. Miner., n. 3, jul.-set. 2011 (adaptado). Os espectros de fotoluminescência do sensor no início e no final do tratamento estão esboçados no gráfico:",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179327,7 +179349,9 @@
       }
     ],
     "correct_alternative": "A",
-    "files": []
+    "files": [
+      "/imagens/71993020-c87c-4438-890b-0ccc69d6d094.png"
+    ]
   },
   {
     "id": "enem-2025-138",
@@ -179337,7 +179361,7 @@
     "subtopic": null,
     "difficulty": null,
     "language": null,
-    "context": "Em um jogo de computador, um cubo se encontra inicialmente posicionado conforme indicado na figura. Cada deslocamento efetuado por esse cubo se dá sempre em uma das direções definidas pelos três eixos coordenados. Ao se movimentar a partir da posição inicial, esse cubo se aproximou 3 unidades do plano yz, se afastou 5 unidades do plano xz e se aproximou 4 unidades do plano xy. A figura que apresenta as projeções ortogonais desse cubo sobre os três planos coordenados, após efetuar as movimentações descritas, é",
+    "context": "![](/imagens/32f8d981-b8fa-4d68-bea2-bf208a73d101.png)\n\nEm um jogo de computador, um cubo se encontra inicialmente posicionado conforme indicado na figura. Cada deslocamento efetuado por esse cubo se dá sempre em uma das direções definidas pelos três eixos coordenados. Ao se movimentar a partir da posição inicial, esse cubo se aproximou 3 unidades do plano yz, se afastou 5 unidades do plano xz e se aproximou 4 unidades do plano xy. A figura que apresenta as projeções ortogonais desse cubo sobre os três planos coordenados, após efetuar as movimentações descritas, é",
     "alternatives_introduction": "",
     "alternatives": [
       {
@@ -179372,7 +179396,9 @@
       }
     ],
     "correct_alternative": "E",
-    "files": []
+    "files": [
+      "/imagens/32f8d981-b8fa-4d68-bea2-bf208a73d101.png"
+    ]
   },
   {
     "id": "enem-2024-112",
